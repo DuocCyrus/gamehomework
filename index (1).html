@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>HẮC VÂN KIẾM — Vượt Ải Diệt Quái</title>
+<meta name="description" content="Game hành động 2D chạy trên trình duyệt, viết bằng Canvas 2D + DOM + Event Handling thuần.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="game" width="960" height="540"></canvas>
+
+  <div id="hud">
+    <div class="hud-left">
+      <div class="portrait"><canvas id="pfp" width="132" height="132"></canvas><span class="lvl" id="heroLv">CẤP 1</span></div>
+      <div class="bars">
+        <div class="bar hp"><i class="ghost"></i><i class="fill"></i><b>HP</b><span id="hpTxt">120/120</span></div>
+        <div class="bar mp"><i class="fill"></i><b>MP</b><span id="mpTxt">100/100</span></div>
+        <div class="bar en"><i class="fill"></i><b>ULT</b><span id="enTxt">0%</span></div>
+      </div>
+    </div>
+
+    <div class="hud-top">
+      <div id="levelName">ẢI I — RỪNG TỬ KHÍ</div>
+      <div id="waveDots"></div>
+    </div>
+
+    <div class="hud-right">
+      <div class="stat"><small>ĐIỂM</small><strong id="score">0</strong></div>
+      <div class="stat combo" id="comboBox"><small>LIÊN HOÀN</small><strong id="combo">x0</strong></div>
+    </div>
+
+    <div id="bossBar" class="hidden">
+      <div class="bname" id="bossName">HẮC LONG VƯƠNG</div>
+      <div class="btrack"><i class="ghost"></i><i class="fill"></i></div>
+      <div class="phases"><i></i><i></i><i></i></div>
+    </div>
+
+    <div id="skills"></div>
+  </div>
+
+  <div id="banner"><div class="t1"></div><div class="t2"></div></div>
+  <div id="overlay"></div>
+
+  <div id="touch">
+    <button id="tl">◀</button><button id="tr">▶</button>
+    <button id="tj">▲</button><button id="ta">⚔</button>
+    <button id="td">»</button><button id="tm">✦</button><button id="tu">★</button>
+    <button id="tb">◈</button>
+  </div>
+</div>
+
+  <!-- Thứ tự nạp quan trọng: file sau dùng lại hằng số / lớp của file trước -->
+  <script src="js/01-core.js"></script>
+  <script src="js/02-world.js"></script>
+  <script src="js/03-art-common.js"></script>
+  <script src="js/04-art-hero.js"></script>
+  <script src="js/05-art-mobs.js"></script>
+  <script src="js/06-difficulty.js"></script>
+  <script src="js/07-entities.js"></script>
+  <script src="js/08-cheat.js"></script>
+  <script src="js/09-game.js"></script>
+</body>
+</html>
