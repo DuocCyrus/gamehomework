@@ -3,37 +3,6 @@
 Game hành động 2D chạy thẳng trên trình duyệt, **không framework, không thư viện, không file ảnh**.
 Toàn bộ nhân vật, quái, boss và bối cảnh được vẽ bằng `path` / `gradient` của Canvas 2D.
 
-Bài tập ứng dụng ba chương của cuốn *Eloquent JavaScript*:
-
-| Chương | Áp dụng ở đâu |
-|---|---|
-| **Ch.13 — The Document Object Model** | `09-game.js`, lớp `UI`: `querySelector`, `createElement`, `append`, `insertBefore`, `replaceChildren`, `classList.toggle`, `dataset`. HUD, thanh kỹ năng, bảng nâng cấp, bảng cheat đều được dựng động bằng DOM. |
-| **Ch.15 — Handling Events** | `01-core.js` + `bindUI()`: `keydown`/`keyup` có `preventDefault`, chuột quy đổi toạ độ qua `getBoundingClientRect`, **uỷ quyền sự kiện** cho toàn bộ nút menu, `pointerdown` cho nút cảm ứng, `visibilitychange` tự tạm dừng, và `CustomEvent` (`wave:clear`, `level:clear`) qua `class Game extends EventTarget`. |
-| **Ch.17 — Drawing on Canvas** | `03-art-common.js`, `04-art-hero.js`, `05-art-mobs.js`: mọi sprite là path thủ công. Nền parallax 4 lớp, hệ hạt, vệt kiếm khí dựng bằng `arc()` hai bán kính, biển nham thạch dùng sóng sin. |
-
----
-
-## Chạy thử
-
-**Cách nhanh nhất** — mở thẳng `index.html` bằng trình duyệt (nhấp đúp là được).
-
-**Cách khuyến nghị khi lập trình** — dùng Live Server để tự nạp lại khi sửa code:
-
-```bash
-# VS Code / Antigravity: cài extension "Live Server" rồi bấm chuột phải index.html → Open with Live Server
-# hoặc dùng Python có sẵn:
-python3 -m http.server 8000
-# rồi mở http://localhost:8000
-```
-
-**Xuất một file duy nhất** (để nộp bài hoặc gửi qua chat):
-
-```bash
-node build.mjs      # tạo dist/hac-van-kiem.html, tự chứa hoàn toàn
-```
-
----
-
 ## Điều khiển
 
 | Phím | Hành động |
