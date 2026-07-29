@@ -119,9 +119,11 @@ canvas#game{display:block;width:100%;height:100%;background:#04050a}
 #overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
   font-size:clamp(9px,1.28cqw,17px)}
 #overlay.on{pointer-events:auto;background:rgba(3,5,10,.72);backdrop-filter:blur(3px)}
-#overlay .card{max-width:78%;text-align:center;padding:2.4em 3em;position:relative;
+#overlay .card{max-width:78%;max-height:92%;overflow-y:auto;overscroll-behavior:contain;
+  text-align:center;padding:2.4em 3em;position:relative;
   background:linear-gradient(180deg,rgba(12,16,26,.94),rgba(6,9,16,.94));
   border:1px solid var(--edge);
+  scrollbar-width:thin;scrollbar-color:rgba(103,232,249,.35) transparent;
   clip-path:polygon(0 0,calc(100% - 1.6em) 0,100% 1.6em,100% 100%,1.6em 100%,0 calc(100% - 1.6em));
   animation:rise .45s cubic-bezier(.2,.9,.25,1)}
 @keyframes rise{from{opacity:0;transform:translateY(1.4em) scale(.97)}}
@@ -213,30 +215,136 @@ b.gold,strong.gold{color:var(--en)}
   color:#fca5a5;border:1px dashed rgba(248,113,113,.6);padding:.3em .8em;background:rgba(30,6,10,.6);display:none}
 .cheattag.on{display:block}
 
+/* ---------- Huy hiệu GOD MODE ---------- */
+.godtag{position:absolute;right:1.1em;top:4.6em;display:none;align-items:center;gap:.5em;
+  padding:.42em .9em;background:rgba(48,32,4,.82);border:1px solid var(--en);
+  box-shadow:0 0 1.4em -.2em rgba(251,191,36,.55);
+  clip-path:polygon(0 0,calc(100% - .6em) 0,100% .6em,100% 100%,.6em 100%,0 calc(100% - .6em));
+  animation:godPulse 1.9s ease-in-out infinite}
+.godtag.on{display:flex}
+.godtag b{font-size:.95em;color:var(--en2);line-height:1}
+.godtag span{font-size:.62em;font-weight:800;letter-spacing:.2em;color:var(--en2)}
+.godtag u{text-decoration:none;font-size:.5em;font-weight:700;letter-spacing:.1em;color:#b08a2e}
+@keyframes godPulse{50%{box-shadow:0 0 2.2em -.1em rgba(251,191,36,.85)}}
+
+/* nút GOD MODE trong menu */
+.btn.god{background:transparent;color:var(--en);border:1px solid rgba(251,191,36,.55)}
+.btn.god.on{background:linear-gradient(180deg,var(--en2),var(--en));color:#2a1d02;border-color:transparent}
+.opt.god{color:var(--en);border-color:rgba(251,191,36,.45)}
+.opt.god:hover{color:var(--en2);border-color:var(--en)}
+.opt.god.on{background:rgba(251,191,36,.16);color:var(--en2);border-color:var(--en)}
+
 /* ---------- Chọn độ khó ---------- */
-.difflist{display:grid;gap:.6em;margin-top:1.5em;text-align:left}
-.diffbtn{font-family:inherit;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:.15em 1em;
-  align-items:baseline;padding:.85em 1.2em;background:rgba(255,255,255,.03);
+.difflist{display:grid;gap:.55em;margin-top:1.2em;text-align:left}
+.diffbtn{font-family:inherit;cursor:pointer;display:grid;
+  grid-template-columns:2.1em auto 1fr;gap:.2em .8em;align-items:baseline;
+  padding:.8em 1.1em;background:rgba(255,255,255,.03);
   border:1px solid var(--edge);border-left:3px solid var(--dc);transition:.15s}
-.diffbtn:hover,.diffbtn:focus-visible{background:rgba(255,255,255,.08);transform:translateX(4px);outline:none}
-.diffbtn .dn{font-size:.95em;font-weight:800;letter-spacing:.16em;color:var(--dc)}
+.diffbtn:hover,.diffbtn:focus-visible{background:rgba(255,255,255,.08);transform:translateX(4px);outline:none;
+  border-color:var(--dc);border-left-color:var(--dc)}
+.diffbtn .dnum{grid-row:1/3;align-self:center;justify-self:center;font-size:1.5em;font-weight:800;
+  color:var(--dc);opacity:.4;line-height:1}
+.diffbtn .dn{font-size:1em;font-weight:800;letter-spacing:.16em;color:var(--dc)}
 .diffbtn .ds{font-size:.62em;letter-spacing:.24em;color:var(--muted);font-weight:600}
-.diffbtn .dd{grid-column:1/-1;font-size:.72em;line-height:1.6;color:#9fadc2;margin-top:.35em}
+.diffbtn .dhp{grid-column:2/-1;font-size:.6em;letter-spacing:.14em;color:#6e7c91;font-weight:700}
+.diffbtn .dmeters{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:.15em 1.3em;margin-top:.5em}
+.diffbtn .dm{display:flex;align-items:center;gap:.5em}
+.diffbtn .dm small{font-size:.56em;letter-spacing:.16em;color:#6e7c91;font-weight:700;min-width:6.6em}
+.diffbtn .pips{display:flex;gap:.22em}
+.diffbtn .pips i{width:.5em;height:.5em;background:rgba(255,255,255,.13);transform:rotate(45deg)}
+.diffbtn .pips i.on{background:var(--dc);box-shadow:0 0 .45em var(--dc)}
+.diffbtn .dd{grid-column:2/-1;font-size:.72em;line-height:1.6;color:#9fadc2;margin-top:.55em}
+.diffbtn .dhz{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:.4em;margin-top:.6em}
+.diffbtn .dhz i{font-style:normal;font-size:.58em;font-weight:800;letter-spacing:.12em;
+  color:var(--hc);border:1px solid var(--hc);padding:.28em .7em;opacity:.85}
+
+/* ---------- Lộ trình 3 ải ở màn hình chính ---------- */
+.route{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin-top:1.5em;text-align:left}
+.rt{padding:.75em .9em;background:rgba(255,255,255,.03);border:1px solid var(--edge);
+  border-top:2px solid var(--tc);display:grid;gap:.3em}
+.rt b{font-size:.58em;letter-spacing:.3em;color:var(--tc);font-weight:800}
+.rt span{font-size:.76em;font-weight:600;color:#c3cede;line-height:1.35}
+.rt i{font-style:normal;font-size:.56em;font-weight:800;letter-spacing:.1em;color:var(--hc);opacity:.8}
+@media (max-width:640px){.route{grid-template-columns:1fr}}
+
+/* ---------- Dòng gợi ý & hàng tuỳ chọn ---------- */
+#overlay .hint{font-size:.68em;color:#78859a;margin-top:1em;line-height:1.6}
+#overlay .hint kbd{font-family:inherit;font-weight:800;color:var(--ice)}
+.optrow{display:flex;gap:.5em;justify-content:center;flex-wrap:wrap;margin-top:1.1em;align-items:center}
+.opt{font-family:inherit;font-size:.6em;font-weight:800;letter-spacing:.16em;cursor:pointer;
+  padding:.5em 1em;color:#9fadc2;background:rgba(255,255,255,.03);border:1px solid var(--edge);transition:.15s}
+.opt:hover{color:var(--ice);border-color:rgba(103,232,249,.5)}
+.opt.flat{cursor:default;border-color:transparent;background:none;color:#5f6d80;letter-spacing:.1em}
+.opt.flat:hover{color:#5f6d80}
+
+/* ---------- Bảng hướng dẫn ---------- */
+.helpgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.1em 1.8em;margin-top:1.4em;text-align:left}
+.helpgrid h3{font-size:.6em;letter-spacing:.3em;color:var(--ice);font-weight:800;
+  padding-bottom:.5em;margin-bottom:.6em;border-bottom:1px solid var(--edge)}
+.kr{display:grid;grid-template-columns:8.2em 1fr;gap:.15em .8em;align-items:baseline;margin-bottom:.5em}
+.kk{display:flex;gap:.25em;flex-wrap:wrap}
+.kk kbd{font-family:inherit;font-size:.58em;font-weight:800;letter-spacing:.06em;color:var(--ice);
+  background:rgba(103,232,249,.1);border:1px solid rgba(103,232,249,.3);padding:.25em .5em}
+.kn{font-size:.74em;font-weight:700;color:#dbe4f0}
+.kd{grid-column:2;font-size:.63em;color:#78859a;line-height:1.5}
+.mini{font-size:.68em!important;line-height:1.7!important;color:#9fadc2!important;margin:.5em 0 0!important;max-width:none!important}
+.mini b{color:var(--ice)}
+@media (max-width:700px){.helpgrid{grid-template-columns:1fr}}
+
+/* ---------- Khối giới thiệu bẫy ---------- */
+.hzbox{margin-top:1.4em;text-align:left;border:1px solid rgba(244,63,94,.28);background:rgba(244,63,94,.05);padding:.9em 1.1em}
+.hzhead{font-size:.58em;letter-spacing:.28em;color:#f43f5e;font-weight:800;margin-bottom:.7em}
+.hzr{display:grid;grid-template-columns:1.8em 1fr;gap:.1em .7em;align-items:baseline;margin-bottom:.55em}
+.hzr:last-child{margin-bottom:0}
+.hzr b{grid-row:1/3;font-size:1.15em;color:var(--hc);align-self:center;text-align:center}
+.hzn{font-size:.7em;font-weight:800;letter-spacing:.14em;color:var(--hc)}
+.hzt{grid-column:2;font-size:.64em;color:#9fadc2;line-height:1.55}
+.hzcall{display:grid;grid-template-columns:2.2em 1fr;gap:.15em .8em;align-items:baseline;text-align:left;
+  margin-top:1.3em;padding:.85em 1.1em;border:1px solid var(--hc);background:rgba(255,255,255,.03);
+  border-left:3px solid var(--hc)}
+.hzcall b{grid-row:1/4;align-self:center;justify-self:center;font-size:1.6em;color:var(--hc)}
+.hzcall .hzg{grid-column:2;font-size:.6em;color:#6e7c91;margin-top:.35em;font-style:italic}
 
 /* ---------- Bảng lệnh cheat ---------- */
 #cheatbox{position:absolute;left:0;right:0;bottom:0;display:none;flex-direction:column;
   font-size:clamp(9px,1.15cqw,15px);font-family:ui-monospace,'Cascadia Mono',Consolas,monospace;
-  background:rgba(4,7,13,.94);border-top:1px solid rgba(103,232,249,.35);
+  background:rgba(3,6,12,.97);border-top:2px solid rgba(103,232,249,.5);
   box-shadow:0 -1.4em 3em -1em rgba(0,0,0,.9);z-index:9}
 #cheatbox.on{display:flex}
-.cbhead{font-size:.72em;letter-spacing:.06em;color:#5f6d80;padding:.5em .9em;border-bottom:1px solid rgba(255,255,255,.06)}
-.cblog{height:9.5em;overflow-y:auto;padding:.5em .9em;font-size:.78em;line-height:1.65;color:#cbd5e1}
+.cbhead{display:flex;align-items:center;gap:.9em;padding:.55em .9em;
+  background:rgba(103,232,249,.07);border-bottom:1px solid rgba(255,255,255,.08)}
+.cbtitle{font-size:.78em;font-weight:800;letter-spacing:.22em;color:#67e8f9;white-space:nowrap}
+.cbstatus{display:flex;gap:.35em;flex-wrap:wrap;flex:1;overflow:hidden}
+.cbstatus i{font-style:normal;font-size:.62em;font-weight:800;letter-spacing:.1em;color:#fca5a5;
+  border:1px solid rgba(248,113,113,.5);background:rgba(60,10,18,.6);padding:.2em .55em;white-space:nowrap}
+.cbtip{font-size:.62em;letter-spacing:.05em;color:#5f6d80;white-space:nowrap}
+.cbx{font-family:inherit;font-size:.8em;line-height:1;cursor:pointer;color:#8d99ad;
+  background:transparent;border:1px solid var(--edge);padding:.3em .55em;transition:.15s}
+.cbx:hover{color:#fb7185;border-color:rgba(251,113,133,.6)}
+.cbbody{display:grid;grid-template-columns:1fr 20em;min-height:0}
+.cblog{height:12.5em;overflow-y:auto;padding:.6em .9em;font-size:.78em;line-height:1.7;color:#dbe4f0}
 .cblog div{white-space:pre-wrap;word-break:break-word}
-.cbrow{display:flex;align-items:center;gap:.6em;padding:.5em .9em;border-top:1px solid rgba(255,255,255,.06)}
+.cblog .cbh{font-weight:800;letter-spacing:.14em;margin-top:.5em}
+.cbref{height:12.5em;overflow-y:auto;padding:.6em .8em;border-left:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02)}
+.cbgrp{margin-bottom:.7em}
+.cbgn{font-size:.58em;font-weight:800;letter-spacing:.22em;color:var(--gc);margin-bottom:.4em}
+.cbchips{display:flex;flex-wrap:wrap;gap:.28em}
+.cbchip{font-family:inherit;cursor:pointer;display:flex;align-items:baseline;gap:.32em;
+  padding:.28em .5em;background:rgba(255,255,255,.04);border:1px solid var(--edge);
+  color:#dbe4f0;transition:.12s;text-align:left}
+.cbchip:hover{background:color-mix(in srgb,var(--gc) 18%,transparent);border-color:var(--gc);transform:translateY(-1px)}
+.cbchip b{font-size:.7em;font-weight:800;letter-spacing:.04em}
+.cbchip i{font-style:normal;font-size:.58em;color:#7c8899}
+.cbchip u{text-decoration:none;font-size:.52em;font-weight:800;color:var(--gc);opacity:.75}
+.cbrow{display:flex;align-items:center;gap:.6em;padding:.6em .9em;border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(103,232,249,.04)}
 .cbcaret{color:#67e8f9;font-weight:800}
 .cbrow input{flex:1;background:transparent;border:0;outline:none;color:#eef3fb;
-  font-family:inherit;font-size:.85em;letter-spacing:.02em}
+  font-family:inherit;font-size:.92em;letter-spacing:.02em}
 .cbrow input::placeholder{color:#4b5768}
+.cbghost{font-size:.7em;letter-spacing:.08em;color:#4b5768;white-space:nowrap}
+@media (max-width:760px){.cbbody{grid-template-columns:1fr}.cbref{display:none}.cbtip{display:none}}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}
 
@@ -390,6 +498,208 @@ const Sfx = {
   lose()   { [392, 330, 262, 196].forEach((f, i) => this.tone(f, f * .96, .4, 'sawtooth', .16, i * .16)); }
 };
 
+/* ───────── 2B. NHẠC NỀN — mỗi ải một chủ đề riêng, tổng hợp trực tiếp ─────────
+   Không nạp file nhạc nào: mọi nốt đều do WebAudio dựng tại chỗ, đúng tinh thần
+   "không framework, không thư viện, không file ảnh/âm thanh" của cả dự án.
+   Mỗi bản nhạc là một mảng bước 16 phân; bộ lập lịch nhìn trước 120 ms nên
+   không lệ thuộc vào tốc độ khung hình.                                        */
+
+/* Cao độ: tên nốt → tần số (A4 = 440 Hz) */
+const NOTE = (() => {
+  const base = { C: -9, D: -7, E: -5, F: -4, G: -2, A: 0, B: 2 };
+  const m = {};
+  for (const k in base)
+    for (let oct = 1; oct <= 6; oct++) {
+      m[k + oct] = 440 * Math.pow(2, (base[k] + (oct - 4) * 12) / 12);
+      m[k + '#' + oct] = 440 * Math.pow(2, (base[k] + 1 + (oct - 4) * 12) / 12);
+    }
+  return m;
+})();
+const N = n => NOTE[n] || 0;
+
+/* Ký hiệu: mỗi hàng là 16 bước, '.' = nghỉ.
+   bass = nền trầm · lead = giai điệu · drum = k(kick) s(snare) h(hat) g(gong) */
+const TRACKS = {
+  /* MÀN HÌNH CHÍNH — chậm, thưa, huyền bí */
+  menu: {
+    bpm: 62, wave: 'sine', leadWave: 'triangle', gain: .5,
+    bass: ['A2', '.', '.', '.', '.', '.', '.', '.', 'F2', '.', '.', '.', '.', '.', '.', '.'],
+    lead: ['.', '.', 'A4', '.', '.', 'C5', '.', '.', '.', 'E5', '.', '.', 'D5', '.', '.', '.'],
+    drum: ['.', '.', '.', '.', '.', '.', '.', '.', 'g', '.', '.', '.', '.', '.', '.', '.'],
+    padChord: ['A2', 'E3', 'C4'], padGain: .05
+  },
+  /* ẢI I · RỪNG TỬ KHÍ — âm hưởng ngũ cung, sáo gỗ, rất thoáng */
+  forest: {
+    bpm: 76, wave: 'triangle', leadWave: 'sine', gain: .46,
+    bass: ['D2', '.', '.', '.', 'D2', '.', '.', '.', 'A2', '.', '.', '.', 'A2', '.', '.', '.'],
+    lead: ['D4', '.', 'F4', '.', 'A4', '.', '.', 'G4', 'F4', '.', '.', 'D4', '.', 'C4', '.', '.'],
+    drum: ['.', '.', '.', '.', 'h', '.', '.', '.', '.', '.', '.', '.', 'h', '.', 'h', '.'],
+    padChord: ['D2', 'A2', 'F3'], padGain: .045
+  },
+  /* ẢI II · HANG NHAM THẠCH — trống nặng, bè trầm dồn dập */
+  cave: {
+    bpm: 98, wave: 'sawtooth', leadWave: 'square', gain: .42,
+    bass: ['E2', '.', 'E2', '.', 'G2', '.', 'E2', '.', 'A2', '.', 'A2', '.', 'G2', '.', 'F2', '.'],
+    lead: ['.', '.', '.', 'E4', '.', '.', 'G4', '.', '.', '.', 'A4', '.', '.', 'G4', '.', 'E4'],
+    drum: ['k', '.', '.', 'h', 's', '.', 'h', '.', 'k', '.', 'k', 'h', 's', '.', 'h', 'h'],
+    padChord: ['E2', 'B2', 'G3'], padGain: .05
+  },
+  /* ẢI III · ĐIỆN HẮC ÁM — hành khúc, hợp âm thứ hoà thanh, uy nghi */
+  palace: {
+    bpm: 104, wave: 'sawtooth', leadWave: 'sawtooth', gain: .44,
+    bass: ['C2', '.', 'C2', 'C2', 'G#2', '.', 'G#2', '.', 'A#2', '.', 'A#2', 'A#2', 'G2', '.', 'G2', '.'],
+    lead: ['C5', '.', 'D#5', '.', 'G5', '.', 'F5', 'D#5', 'D5', '.', 'C5', '.', 'G4', '.', 'A#4', '.'],
+    drum: ['k', '.', 'h', '.', 's', '.', 'h', 'h', 'k', 'k', 'h', '.', 's', '.', 'h', 'h'],
+    padChord: ['C2', 'G2', 'D#3'], padGain: .06
+  },
+  /* HẮC LONG VƯƠNG — nhanh, dày, dồn tới cùng */
+  boss: {
+    bpm: 138, wave: 'sawtooth', leadWave: 'square', gain: .48,
+    bass: ['C2', 'C2', '.', 'C2', 'C2', '.', 'C2', 'C2', 'A#1', 'A#1', '.', 'A#1', 'G#1', '.', 'G#1', 'G#1'],
+    lead: ['C5', 'G5', 'D#5', 'C5', 'G#5', 'G5', 'D#5', 'C5', 'A#4', 'F5', 'D5', 'A#4', 'G4', 'D5', 'B4', 'G4'],
+    drum: ['k', 'h', 's', 'h', 'k', 'h', 's', 'h', 'k', 'h', 's', 'h', 'k', 'k', 's', 's'],
+    padChord: ['C2', 'G2', 'D#3'], padGain: .07
+  },
+  /* CHIẾN THẮNG — vang, mở, chỉ chạy khi kết ván */
+  victory: {
+    bpm: 84, wave: 'triangle', leadWave: 'triangle', gain: .5,
+    bass: ['C2', '.', '.', '.', 'G2', '.', '.', '.', 'A2', '.', '.', '.', 'F2', '.', '.', '.'],
+    lead: ['C5', '.', 'E5', '.', 'G5', '.', '.', 'C6', '.', 'B5', '.', 'G5', 'E5', '.', '.', '.'],
+    drum: ['g', '.', '.', '.', '.', '.', '.', '.', 'g', '.', '.', '.', '.', '.', '.', '.'],
+    padChord: ['C3', 'G3', 'E4'], padGain: .06
+  }
+};
+
+const Music = {
+  enabled: true, name: null, track: null,
+  bus: null, padGain: null, padOsc: [], subOsc: null,
+  step: 0, nextT: 0, timer: null, tense: false,
+
+  init() {
+    Sfx.init();
+    if (!Sfx.ac || this.bus) return;
+    this.bus = Sfx.ac.createGain();
+    this.bus.gain.value = 0;
+    const lp = Sfx.ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 5200;
+    this.bus.connect(lp).connect(Sfx.master);
+    this.lp = lp;
+  },
+
+  /** Đổi bản nhạc; gọi lại cùng tên thì bỏ qua để nhạc không giật */
+  play(name) {
+    if (!TRACKS[name]) return;
+    this.init();
+    if (!Sfx.ac) return;
+    if (this.name === name && this.timer) { this.fade(this.enabled && !Sfx.muted ? 1 : 0); return; }
+    this.stopPad();
+    this.name = name; this.track = TRACKS[name];
+    this.step = 0; this.nextT = Sfx.ac.currentTime + .06;
+    if (!this.timer) this.timer = setInterval(() => { try { this.tick(); } catch (e) { /* nhạc hỏng không được làm chết game */ } }, 25);
+    this.startPad();
+    this.fade(this.enabled && !Sfx.muted ? 1 : 0);
+  },
+
+  fade(v, dur = .8) {
+    if (!this.bus || !Sfx.ac) return;
+    const g = this.bus.gain, t = Sfx.ac.currentTime;
+    g.cancelScheduledValues(t);
+    g.setValueAtTime(Math.max(.0001, g.value), t);
+    g.linearRampToValueAtTime(v * (this.track ? this.track.gain : .5), t + dur);
+  },
+
+  stop() { this.fade(0, .5); },
+  setEnabled(on) { this.enabled = on; this.fade(on && !Sfx.muted ? 1 : 0, .4); if (on && !this.timer && this.name) this.play(this.name); },
+  /** Ác Mộng: thêm một tầng trầm rền phía dưới cho nặng không khí */
+  setTense(on) {
+    this.tense = on;
+    if (!Sfx.ac || !this.bus) return;
+    if (on && !this.subOsc) {
+      const o = Sfx.ac.createOscillator(), g = Sfx.ac.createGain();
+      o.type = 'sine'; o.frequency.value = 41.2;                 // E1
+      g.gain.value = .09;
+      o.connect(g).connect(this.bus); o.start();
+      this.subOsc = { o, g };
+    } else if (!on && this.subOsc) {
+      try { this.subOsc.o.stop(); } catch (e) { /* đã dừng */ }
+      this.subOsc = null;
+    }
+  },
+
+  /* nền hợp âm giữ liên tục, tạo bề dày cho từng ải */
+  startPad() {
+    if (!Sfx.ac || !this.track) return;
+    const t = Sfx.ac.currentTime;
+    this.padGain = Sfx.ac.createGain();
+    this.padGain.gain.setValueAtTime(0, t);
+    this.padGain.gain.linearRampToValueAtTime(this.track.padGain, t + 1.6);
+    this.padGain.connect(this.bus);
+    for (const nm of this.track.padChord) {
+      const o = Sfx.ac.createOscillator(), g = Sfx.ac.createGain();
+      o.type = 'sawtooth'; o.frequency.value = N(nm);
+      o.detune.value = rand(-7, 7);
+      g.gain.value = .34;
+      o.connect(g).connect(this.padGain); o.start(t);
+      this.padOsc.push(o);
+    }
+  },
+  stopPad() {
+    for (const o of this.padOsc) { try { o.stop(); } catch (e) { /* đã dừng */ } }
+    this.padOsc = [];
+    if (this.padGain) { try { this.padGain.disconnect(); } catch (e) { /* đã ngắt */ } this.padGain = null; }
+  },
+
+  /* bộ lập lịch nhìn trước — không phụ thuộc requestAnimationFrame */
+  tick() {
+    if (!Sfx.ac || !this.track) return;
+    const T = this.track, spb = 60 / T.bpm / 4;               // một bước = nốt móc kép
+    while (this.nextT < Sfx.ac.currentTime + .12) {
+      this.emit(this.step % 16, this.nextT, spb);
+      this.step++; this.nextT += spb;
+    }
+  },
+
+  emit(i, t, spb) {
+    const T = this.track, ac = Sfx.ac;
+    if (Sfx.muted || !this.enabled) return;
+    const b = T.bass[i]; if (b && b !== '.') this.voice(N(b), t, spb * 3.4, T.wave, .17);
+    const l = T.lead[i]; if (l && l !== '.') this.voice(N(l), t, spb * 2.6, T.leadWave, .085);
+    const d = T.drum[i];
+    if (d === 'k') { this.voice(64, t, .16, 'sine', .3, 34); this.hit(t, .05, .3, 90); }
+    else if (d === 's') this.hit(t, .13, .16, 1400);
+    else if (d === 'h') this.hit(t, .045, .05, 6500);
+    else if (d === 'g') { this.voice(96, t, 1.6, 'sine', .16, 58); this.hit(t, .7, .07, 300); }
+  },
+
+  /** một nốt: dao động + bao biên độ, có thể trượt cao độ (dùng cho trống trầm) */
+  voice(f, t, dur, type, vol, glide) {
+    const ac = Sfx.ac, o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (glide) o.frequency.exponentialRampToValueAtTime(glide, t + dur * .85);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(vol, t + .012);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(this.bus); o.start(t); o.stop(t + dur + .03);
+  },
+  /** tiếng gõ: nhiễu trắng lọc thông cao */
+  hit(t, dur, vol, hp) {
+    const ac = Sfx.ac, n = (ac.sampleRate * dur) | 0;
+    if (n < 2) return;
+    const buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
+    for (let k = 0; k < n; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / n, 2);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp;
+    const g = ac.createGain(); g.gain.value = vol;
+    src.connect(f).connect(g).connect(this.bus); src.start(t);
+  }
+};
+
+/** Tắt / bật toàn bộ âm thanh, kéo theo cả nhạc nền */
+function toggleMute() {
+  Sfx.muted = !Sfx.muted;
+  Music.fade(Sfx.muted || !Music.enabled ? 0 : 1, .3);
+}
+
 /* ───────── 3. INPUT — Ch.15 Handling Events ───────── */
 const Input = {
   held: new Set(), fresh: new Set(),
@@ -511,19 +821,19 @@ const THEMES = {
 };
 
 const LEVELS = [
-  { name: 'ẢI I — RỪNG TỬ KHÍ', theme: 'forest', w: 2400,
+  { name: 'ẢI I — RỪNG TỬ KHÍ', theme: 'forest', w: 2400, hazard: 'spike',
     lore: 'Sương độc phủ kín Vọng Lâm. Những sinh vật từng là dân làng nay chỉ còn lại hình hài nhớp nháp, bò lê dưới ánh trăng.',
     plat: [[420, 366, 170], [800, 300, 200], [1240, 372, 160], [1610, 302, 210], [2010, 356, 170]],
     platN: [[250, 352, 150], [520, 288, 130], [800, 346, 160], [1090, 276, 140], [1380, 344, 165],
             [1680, 284, 140], [1960, 348, 160], [2210, 292, 140]],
     waves: [[['slime', 4]], [['slime', 3], ['wraith', 3]], [['skeleton', 3], ['archer', 1], ['slime', 2]]] },
-  { name: 'ẢI II — HANG NHAM THẠCH', theme: 'cave', w: 2400,
+  { name: 'ẢI II — HANG NHAM THẠCH', theme: 'cave', w: 2400, hazard: 'meteor',
     lore: 'Dưới lòng Hoả Sơn, xương của một ngàn kiếm sĩ đi trước xếp thành bậc thang. Không ai trong số họ quay về.',
     plat: [[360, 340, 190], [760, 268, 170], [1120, 360, 200], [1520, 288, 180], [1900, 350, 220]],
     platN: [[240, 348, 160], [530, 272, 135], [830, 344, 170], [1140, 266, 140], [1450, 342, 165],
             [1760, 278, 140], [2050, 348, 175]],
     waves: [[['skeleton', 3], ['archer', 1]], [['mage', 2], ['archer', 2], ['wraith', 2]], [['golem', 1], ['skeleton', 2], ['archer', 2], ['mage', 1]]] },
-  { name: 'ẢI III — ĐIỆN HẮC ÁM', theme: 'palace', w: 1920, boss: true,
+  { name: 'ẢI III — ĐIỆN HẮC ÁM', theme: 'palace', w: 1920, boss: true, hazard: 'lava',
     lore: 'Cửa điện mở. Bên trong, Hắc Long Vương đã đợi kiếm sĩ cuối cùng suốt ba trăm năm.',
     plat: [[210, 356, 165], [470, 288, 140], [740, 350, 180], [1010, 282, 150],
            [1300, 352, 175], [1580, 290, 145], [620, 214, 120], [1130, 208, 125]],
@@ -640,8 +950,19 @@ function drawBackground(ctx, th, camX, t) {
 }
 
 let NIGHTMARE = false;
+/* Ải nào đang bật hiểm hoạ gì — quyết định luôn cả tông màu địa hình */
+let HAZARD_KIND = null;
+/* Mỗi loại bẫy nhuộm mặt đất một tông riêng, để ba ải Ác Mộng không nhìn giống nhau */
+const HZ_TINT = {
+  spike:  { ground: ['#232c2a', '#0a1010'], accent: '#9fe8c0', crack: 'rgba(190,235,215,.34)', veil: 'rgba(70,120,110,.05)' },
+  meteor: { ground: ['#3a2418', '#150a06'], accent: '#ff9a4a', crack: 'rgba(255,150,60,.5)',  veil: 'rgba(255,90,30,.05)' },
+  lava:   { ground: ['#2e1712', '#120705'], accent: '#ff5a1f', crack: 'rgba(255,110,30,.5)',  veil: 'rgba(255,60,20,.055)' }
+};
+const hzTint = () => (NIGHTMARE && HZ_TINT[HAZARD_KIND]) || null;
+
 function drawGround(ctx, th, camX, w) {
-  const T = NIGHTMARE ? { ...THEMES[th], ground: ['#2e1712', '#120705'], accent: '#ff5a1f' } : THEMES[th];
+  const tint = hzTint();
+  const T = tint ? { ...THEMES[th], ground: tint.ground, accent: tint.accent } : THEMES[th];
   const g = ctx.createLinearGradient(0, GROUND, 0, VH);
   g.addColorStop(0, T.ground[0]); g.addColorStop(1, T.ground[1]);
   ctx.fillStyle = g; ctx.fillRect(0, GROUND, VW, VH - GROUND);
@@ -652,13 +973,13 @@ function drawGround(ctx, th, camX, w) {
   for (let x = start; x < camX + VW + step; x += step) {
     const sx = x - camX;
     ctx.beginPath(); ctx.moveTo(sx, GROUND + 6); ctx.lineTo(sx - 8, VH); ctx.stroke();
-    if (th === 'cave' || NIGHTMARE) {
-      ctx.strokeStyle = 'rgba(255,110,30,.5)'; ctx.beginPath();
+    if (th === 'cave' || tint) {
+      ctx.strokeStyle = tint ? tint.crack : 'rgba(255,110,30,.5)'; ctx.beginPath();
       ctx.moveTo(sx + 18, GROUND + 14); ctx.lineTo(sx + 34, GROUND + 30); ctx.lineTo(sx + 24, VH); ctx.stroke();
       ctx.strokeStyle = 'rgba(0,0,0,.35)';
     }
   }
-  if (th === 'forest' && !NIGHTMARE) {
+  if (th === 'forest' && !tint) {
     ctx.fillStyle = '#2c5c3b';
     for (let x = start; x < camX + VW + step; x += 22) {
       const sx = x - camX, h = 8 + ((x * 7) % 11);
@@ -668,7 +989,8 @@ function drawGround(ctx, th, camX, w) {
 }
 
 function drawPlatform(ctx, th, p) {
-  const T = NIGHTMARE ? { ground: ['#3a1c15', '#140806'], accent: '#ff5a1f' } : THEMES[th];
+  const tint = hzTint();
+  const T = tint ? { ground: tint.ground, accent: tint.accent } : THEMES[th];
   const [x, y, w] = p, h = 20;
   ctx.fillStyle = T.ground[1]; ctx.fillRect(x, y, w, h + 12);
   const g = ctx.createLinearGradient(0, y, 0, y + h);
@@ -677,8 +999,8 @@ function drawPlatform(ctx, th, p) {
   ctx.fillStyle = T.accent; ctx.globalAlpha = .55; ctx.fillRect(x, y, w, 2.5); ctx.globalAlpha = 1;
   ctx.fillStyle = 'rgba(0,0,0,.4)';
   for (let i = 8; i < w - 8; i += 26) ctx.fillRect(x + i, y + h, 5, 10 + (i % 3) * 4);
-  if (NIGHTMARE) {
-    ctx.strokeStyle = 'rgba(255,90,30,.55)'; ctx.lineWidth = 1.6;
+  if (tint) {
+    ctx.strokeStyle = tint.crack; ctx.lineWidth = 1.6;
     for (let i = 14; i < w - 14; i += 34) {
       ctx.beginPath(); ctx.moveTo(x + i, y + 4); ctx.lineTo(x + i + 8, y + 12); ctx.lineTo(x + i + 2, y + h); ctx.stroke();
     }
@@ -1650,39 +1972,101 @@ const DIFFS = [
     hpMul: 1.5, dmgMul: 1.45, spdMul: 1.12, cntMul: 1.45, heroHp: 100, drop: .17, scoreMul: 1.7, bossMul: 1.35,
     desc: 'Quái dày hơn, máu trâu, ra đòn nhanh. Vật phẩm hiếm — đứng đỡ là chết.' },
   { key: 'nightmare', name: 'ÁC MỘNG', sub: 'Cửu U Ngục', col: '#f43f5e', hazard: true,
-    hpMul: 2.05, dmgMul: 1.9, spdMul: 1.26, cntMul: 1.85, heroHp: 85, drop: .11, scoreMul: 2.6, bossMul: 1.75,
-    desc: 'Địa hình vỡ vụn treo trên biển nham thạch: nham thạch dâng theo chu kỳ, thiên thạch rơi từ trời, bẫy chông trồi dưới đất.' }
+    hpMul: 1.8, dmgMul: 1.62, spdMul: 1.18, cntMul: 1.55, heroHp: 100, drop: .17, scoreMul: 2.6, bossMul: 1.55,
+    desc: 'Mỗi ải một loại bẫy riêng — chông ở rừng, thiên thạch trong hang, nham thạch ở điện. Học một bẫy rồi mới phải học bẫy sau.' }
 ];
 
 /* ═══ 8D. CHEAT ═══ */
-const CHEAT = { god: false, noclip: false, speed: 1, dmgMul: 1, infMp: false };
+const CHEAT = { god: false, noclip: false, speed: 1, dmgMul: 1, infMp: false, godMode: false };
 
-/* ═══ 8E. HIỂM HOẠ ĐỊA HÌNH (chỉ bật ở Ác Mộng) ═══ */
+/* ═══ 8D-bis. GOD MODE — một công tắc gộp cho việc test nhanh ═══
+   Thay vì mở bảng lệnh rồi gõ god / mp / ult / dmg từng cái, bấm  G  (hoặc F2)
+   là bật hết cùng lúc: bất tử · nội lực vô hạn · máu-khiên-ULT luôn đầy ·
+   sát thương ×5 để lướt qua nội dung cho nhanh.                              */
+const GOD_DMG = 5;
+
+function setGodMode(on) {
+  CHEAT.godMode = on;
+  CHEAT.god = on;
+  CHEAT.infMp = on;
+  CHEAT.dmgMul = on ? GOD_DMG : 1;
+  const h = GAME && GAME.hero;
+  if (on && h) { h.hp = h.maxHp; h.sh = h.maxSh; h.mp = h.maxMp; h.energy = 100; h.brokeT = 0; h.stunT = 0; }
+  if (GAME && GAME.ui) { GAME.ui.cheatBadge(); GAME.ui.godBadge(); }
+  Sfx.init();
+  if (on) { Sfx.tone(520, 980, .16, 'triangle', .16); Sfx.tone(780, 1320, .18, 'triangle', .1, .07); }
+  else Sfx.tone(420, 190, .2, 'triangle', .13);
+  if (h && on) floatTxt(h.x, h.y - 86, 'GOD MODE', '#fbbf24', true);
+  return on;
+}
+const toggleGodMode = () => setGodMode(!CHEAT.godMode);
+
+/* ═══ 8E. HIỂM HOẠ ĐỊA HÌNH — mỗi ải một loại, chỉ bật ở Ác Mộng ═══
+   Trước đây cả ba loại bẫy đổ dồn vào mọi ải nên gần như không thể sống sót.
+   Nay mỗi ải chỉ có đúng một loại, tăng dần độ phức tạp:
+     ải 1 · bẫy chông   — bẫy tĩnh, học cách đọc vết nứt báo trước
+     ải 2 · thiên thạch — bẫy động từ trên trời, phải di chuyển liên tục
+     ải 3 · nham thạch  — bẫy toàn màn, ép leo cao và giữ nhịp             */
+const HZ_INFO = {
+  spike:  { key: 'spike',  ic: '⩗', name: 'BẪY CHÔNG',   sub: 'Địa Sát Trận',  col: '#9fe8c0',
+            tip: 'Vết nứt sáng dưới đất = chông sắp trồi. Nhảy hoặc lướt qua.' },
+  meteor: { key: 'meteor', ic: '☄', name: 'THIÊN THẠCH', sub: 'Hoả Vân Thạch', col: '#ff9a4a',
+            tip: 'Vòng tròn đỏ nhấp nháy = điểm rơi. Rời khỏi vòng, tránh cả vũng lửa còn lại.' },
+  lava:   { key: 'lava',   ic: '≈', name: 'NHAM THẠCH',  sub: 'Cửu U Hoả Hải', col: '#ff5a1f',
+            tip: 'Nham thạch dâng theo chu kỳ. Nghe tiếng gầm là leo lên bệ đá ngay.' }
+};
+
 const LAVA_LOW = VH + 70, LAVA_HIGH = GROUND - 86;
-const LAVA_CYCLE = { low: 11, rise: 2.6, high: 6.5, fall: 2.6 };
+const LAVA_CYCLE = { low: 12, rise: 3, high: 5.5, fall: 2.8 };
 const LAVA_NEXT = { low: 'rise', rise: 'high', high: 'fall', fall: 'low' };
+const HZ_GRACE = 3.2;                       // giây được yên thân khi vừa vào ải
 
 class Hazards {
   constructor(G) {
     this.G = G;
-    this.on = !!G.diff.hazard;
+    /* chỉ lấy đúng loại bẫy của ải hiện tại */
+    this.kind = G.diff.hazard ? (G.level.hazard || null) : null;
+    this.on = !!this.kind;
+    this.grace = HZ_GRACE;
     this.lavaY = LAVA_LOW; this.lavaT = 0; this.phase = 'low'; this.burn = 0;
     this.warns = []; this.rocks = []; this.fires = []; this.spikes = [];
-    this.metT = 5;
-    if (this.on) {
-      for (let x = 260; x < G.level.w - 180; x += randInt(210, 320))
+    this.metT = 4.5;
+    this.embers = [];
+    if (this.kind === 'spike') {
+      for (let x = 300; x < G.level.w - 200; x += randInt(200, 300))
         this.spikes.push({ x, t: rand(0, 3.6) });
+    }
+    if (this.kind === 'meteor')
+      this.embers = Array.from({ length: 26 }, () => ({ x: rand(0, 3000), y: rand(0, VH), s: rand(.3, 1) }));
+    if (this.kind === 'lava') {
       this.bubbles = Array.from({ length: 30 }, () => ({ x: rand(0, 3000), p: rand(0, TAU), s: rand(.4, 1.4) }));
       this.embers = Array.from({ length: 40 }, () => ({ x: rand(0, 3000), y: rand(0, VH), s: rand(.3, 1) }));
     }
   }
-  get lavaUp() { return this.on && this.lavaY < GROUND; }
+  get info() { return HZ_INFO[this.kind] || null; }
+  get lavaUp() { return this.kind === 'lava' && this.lavaY < GROUND; }
+
+  /** Bật thủ công một loại bẫy (dùng cho lệnh cheat) */
+  setKind(kind) {
+    const G = this.G;
+    const fake = { ...G, diff: { hazard: true }, level: { ...G.level, hazard: kind } };
+    const hz = new Hazards(fake);
+    hz.G = G; hz.grace = .4;
+    return hz;
+  }
 
   update(dt) {
     if (!this.on) return;
+    if (this.grace > 0) { this.grace -= dt; return; }
     const G = this.G, h = G.hero;
 
-    /* ── nham thạch dâng / rút ── */
+    if (this.kind === 'lava') this.updateLava(dt, h, G);
+    if (this.kind === 'meteor') this.updateMeteor(dt, h, G);
+    if (this.kind === 'spike') this.updateSpike(dt, h, G);
+  }
+
+  /* ── ẢI III · biển nham thạch dâng theo chu kỳ ── */
+  updateLava(dt, h, G) {
     this.lavaT += dt;
     const span = LAVA_CYCLE[this.phase], u = clamp(this.lavaT / span, 0, 1), sm = u * u * (3 - 2 * u);
     if (this.phase === 'rise') this.lavaY = lerp(LAVA_LOW, LAVA_HIGH, sm);
@@ -1703,52 +2087,56 @@ class Hazards {
       this.burn -= dt;
       spark(h.x + rand(-10, 10), h.y - 6, 1, '#ffb066', 120, { up: 90 });
       if (this.burn <= 0) {
-        this.burn = .48;
-        if (!CHEAT.god) { h.invT = 0; h.hurt(14, 0, G); }
+        this.burn = .55;
+        if (!CHEAT.god) { h.invT = 0; h.hurt(12, 0, G); }
         h.vy = -430; cam.kick(5);
         floatTxt(h.x, h.y - 76, 'BỎNG!', '#ff7a3c');
       }
     }
+  }
 
-    /* ── thiên thạch ── */
+  /* ── ẢI II · mưa thiên thạch, để lại vũng lửa ── */
+  updateMeteor(dt, h, G) {
     this.metT -= dt;
     if (this.metT <= 0) {
-      this.metT = rand(3.6, 6.4);
-      const n = randInt(2, 4);
+      this.metT = rand(4.2, 7.2);
+      const n = randInt(2, 3);
       for (let i = 0; i < n; i++)
-        this.warns.push({ x: clamp((h ? h.x : 400) + rand(-380, 380), 70, G.level.w - 70), t: 1.2 });
+        this.warns.push({ x: clamp((h ? h.x : 400) + rand(-380, 380), 70, G.level.w - 70), t: 1.35 });
+      Sfx.tone(120, 300, .5, 'sine', .07);
     }
     for (let i = this.warns.length - 1; i >= 0; i--) {
       const w = this.warns[i]; w.t -= dt;
       if (w.t <= 0) { this.rocks.push({ x: w.x + rand(-8, 8), y: -70, vy: 480, r: 16 }); this.warns.splice(i, 1); }
     }
-    const floorY = Math.min(GROUND, this.lavaY);
     for (let i = this.rocks.length - 1; i >= 0; i--) {
       const m = this.rocks[i];
       m.vy += 520 * dt; m.y += m.vy * dt;
       spark(m.x + rand(-6, 6), m.y - 10, 1, pick(['#ffb066', '#ff5a1f']), 60, { up: -60 });
-      if (m.y >= floorY) { this.boom(m.x, floorY); this.rocks.splice(i, 1); }
+      if (m.y >= GROUND) { this.boom(m.x, GROUND); this.rocks.splice(i, 1); }
     }
-
-    /* ── vũng lửa còn lại ── */
+    /* vũng lửa còn lại sau va chạm */
     for (let i = this.fires.length - 1; i >= 0; i--) {
       const f = this.fires[i]; f.t -= dt;
       if (f.t <= 0) { this.fires.splice(i, 1); continue; }
       if (Math.random() < .5) spark(f.x + rand(-26, 26), f.y - 4, 1, '#ff9d3d', 90, { up: 110 });
       if (h && h.alive && !CHEAT.god && Math.abs(h.x - f.x) < 32 && h.y > f.y - 26 && h.y < f.y + 20) {
         f.hit = (f.hit || 0) - dt;
-        if (f.hit <= 0) { f.hit = .55; h.hurt(10, sign(h.x - f.x || 1), G); }
+        if (f.hit <= 0) { f.hit = .6; h.hurt(8, sign(h.x - f.x || 1), G); }
       }
     }
+  }
 
-    /* ── bẫy chông ── */
+  /* ── ẢI I · bẫy chông trồi lên theo nhịp, có vết nứt báo trước ── */
+  updateSpike(dt, h, G) {
     for (const s of this.spikes) {
       s.t += dt;
       const ph = s.t % 3.6;
-      s.up = ph < 2.3 ? 0 : ph < 2.8 ? -((ph - 2.3) / .5) : clamp((ph - 2.8) / .14, 0, 1);
+      // 0 → 2.25 nằm im · 2.25 → 2.8 nứt cảnh báo · 2.8 → trồi lên rồi rút
+      s.up = ph < 2.25 ? 0 : ph < 2.8 ? -((ph - 2.25) / .55) : clamp((ph - 2.8) / .14, 0, 1);
       if (s.up > .6 && h && h.alive && !CHEAT.god && h.invT <= 0 &&
-          Math.abs(h.x - s.x) < 28 && h.y > GROUND - 34 && h.y <= GROUND + 4) {
-        h.hurt(20, sign(h.x - s.x || 1), G);
+          Math.abs(h.x - s.x) < 26 && h.y > GROUND - 34 && h.y <= GROUND + 4) {
+        h.hurt(16, sign(h.x - s.x || 1), G);
         Sfx.hit();
       }
     }
@@ -1761,7 +2149,7 @@ class Hazards {
     shard(x, y, 14, '#4a3226');
     spark(x, y, 24, '#ffb066', 460);
     this.fires.push({ x, y, t: 2.8, hit: 0 });
-    if (h && h.alive && !CHEAT.god && Math.hypot(h.x - x, h.y - 20 - y) < 86) h.hurt(30, sign(h.x - x || 1), G);
+    if (h && h.alive && !CHEAT.god && Math.hypot(h.x - x, h.y - 20 - y) < 82) h.hurt(22, sign(h.x - x || 1), G);
     for (const e of G.enemies) if (Math.hypot(e.x - x, e.y - y) < 96) e.hurt(40, sign(e.x - x || 1), G, false);
   }
 
@@ -1769,7 +2157,7 @@ class Hazards {
   drawUnder(ctx, t) {
     if (!this.on) return;
     for (const w of this.warns) {                        // vòng cảnh báo thiên thạch
-      const u = 1 - w.t / 1.2, y = Math.min(GROUND, this.lavaY) - 1;
+      const u = 1 - w.t / 1.35, y = GROUND - 1;
       ctx.save(); ctx.globalAlpha = .35 + Math.abs(Math.sin(u * 22)) * .5;
       ctx.strokeStyle = '#ff4d4d'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.ellipse(w.x, y, 40 - u * 16, 14 - u * 6, 0, 0, TAU); ctx.stroke();
@@ -1780,9 +2168,11 @@ class Hazards {
     }
     for (const s of this.spikes) {                       // bẫy chông
       const base = GROUND;
-      if (s.up < 0) {                                    // nứt cảnh báo
-        ctx.save(); ctx.globalAlpha = .4 + Math.abs(s.up) * .6;
-        ctx.strokeStyle = '#ff7a3c'; ctx.lineWidth = 2;
+      if (s.up < 0) {                                    // nứt cảnh báo — càng gần càng sáng
+        const a = Math.abs(s.up);
+        ctx.save(); ctx.globalAlpha = .4 + a * .6;
+        glowDot(ctx, s.x, base, 34 + a * 14, 'rgba(159,232,192,.3)');
+        ctx.strokeStyle = '#9fe8c0'; ctx.lineWidth = 2;
         for (let i = -1; i <= 1; i++) {
           ctx.beginPath(); ctx.moveTo(s.x + i * 9 - 4, base); ctx.lineTo(s.x + i * 9 + 3, base + 7); ctx.stroke();
         }
@@ -1826,7 +2216,7 @@ class Hazards {
       ctx.fillStyle = 'rgba(255,140,50,.4)';
       ctx.beginPath(); ctx.moveTo(m.x - 13, m.y); ctx.lineTo(m.x + 13, m.y); ctx.lineTo(m.x, m.y - 74); ctx.closePath(); ctx.fill();
     }
-    if (this.lavaY > VH + 30) return;
+    if (this.kind !== 'lava' || this.lavaY > VH + 30) return;
     const y = this.lavaY;                                 // biển nham thạch
     const g = ctx.createLinearGradient(0, y - 8, 0, VH + 60);
     g.addColorStop(0, '#ffe08a'); g.addColorStop(.1, '#ff5a1f');
@@ -1959,6 +2349,11 @@ class Hero {
       this.sh = Math.min(this.maxSh, this.sh + (this.blocking ? 8 : 26) * dt);
     this.mp = CHEAT.infMp ? this.maxMp : Math.min(this.maxMp, this.mp + 13 * (1 + this.up.mp * .3) * dt);
     if (CHEAT.god) this.invT = Math.max(this.invT, .2);
+    /* GOD MODE giữ mọi thanh luôn đầy để khỏi phải dừng lại hồi phục khi test */
+    if (CHEAT.godMode) {
+      this.hp = this.maxHp; this.sh = this.maxSh; this.energy = 100;
+      this.brokeT = 0; this.stunT = 0;
+    }
 
     const P = Input.pad;
     const L = Input.down('KeyA', 'ArrowLeft') || P.left;
@@ -2690,34 +3085,108 @@ const CheatBox = {
   build() {
     if (this.root) return;
     const stage = document.querySelector('#stage');
-    const root = document.createElement('div');
-    root.id = 'cheatbox';
-    const head = document.createElement('div');
-    head.className = 'cbhead';
-    head.textContent = 'BẢNG LỆNH · gõ  help  để xem tất cả · phím  `  hoặc  F1  để đóng/mở';
-    const log = document.createElement('div'); log.className = 'cblog';
-    const row = document.createElement('div'); row.className = 'cbrow';
-    const caret = document.createElement('span'); caret.className = 'cbcaret'; caret.textContent = '❯';
+    const root = el('div'); root.id = 'cheatbox';
+
+    /* ── thanh tiêu đề: tên bảng · trạng thái cheat đang bật · nút đóng ── */
+    const head = el('div', 'cbhead');
+    const title = el('span', 'cbtitle', '⌘ BẢNG LỆNH');
+    const status = el('span', 'cbstatus');
+    const tip = el('span', 'cbtip', 'Enter chạy · Tab gợi ý · ↑↓ lịch sử · Esc đóng');
+    const close = el('button', 'cbx', '✕'); close.title = 'Đóng bảng lệnh (Esc)';
+    close.addEventListener('click', () => this.open(false));
+    head.append(title, status, tip, close);
+
+    /* ── thân: nhật ký bên trái, danh sách lệnh bấm được bên phải ── */
+    const body = el('div', 'cbbody');
+    const log = el('div', 'cblog');
+    const ref = el('div', 'cbref');
+    for (const g of CHEAT_GROUPS) {
+      const sec = el('div', 'cbgrp');
+      sec.style.setProperty('--gc', g.col);
+      sec.append(el('div', 'cbgn', g.name));
+      const wrap = el('div', 'cbchips');
+      for (const it of g.items) {
+        const chip = el('button', 'cbchip');
+        chip.append(el('b', null, it.c));
+        if (it.arg) chip.append(el('i', null, it.arg));
+        if (it.k) chip.append(el('u', null, it.k));
+        chip.title = it.d;
+        chip.dataset.cmd = it.c;
+        chip.dataset.fill = it.fill || '';
+        wrap.append(chip);
+      }
+      sec.append(wrap);
+      ref.append(sec);
+    }
+    /* uỷ quyền sự kiện — một listener cho mọi chip */
+    ref.addEventListener('click', e => {
+      const c = e.target.closest('.cbchip'); if (!c) return;
+      if (c.dataset.fill) { this.input.value = c.dataset.fill; this.input.focus(); }
+      else { this.run(c.dataset.cmd); this.input.focus(); }
+    });
+    body.append(log, ref);
+
+    /* ── dòng nhập ── */
+    const row = el('div', 'cbrow');
+    const caret = el('span', 'cbcaret', '❯');
     const inp = document.createElement('input');
     inp.type = 'text'; inp.spellcheck = false; inp.autocomplete = 'off';
-    inp.placeholder = 'god / heal / kill / skip / boss / spawn golem 3 …';
-    row.append(caret, inp);
-    root.append(head, log, row);
+    inp.placeholder = 'gõ lệnh, ví dụ:  god  ·  spawn golem 3  ·  diff 4';
+    const ghost = el('span', 'cbghost');            // gợi ý hoàn thành lệnh
+    row.append(caret, inp, ghost);
+    root.append(head, body, row);
     stage.append(root);
-    this.root = root; this.input = inp; this.log = log;
+    this.root = root; this.input = inp; this.log = log; this.status = status; this.ghost = ghost;
 
+    inp.addEventListener('input', () => this.hintUpdate());
     inp.addEventListener('keydown', e => {
       e.stopPropagation();
-      if (e.key === 'Enter') { const v = inp.value.trim(); inp.value = ''; if (v) this.run(v); }
+      if (e.key === 'Enter') { const v = inp.value.trim(); inp.value = ''; this.hintUpdate(); if (v) this.run(v); }
       else if (e.key === 'Escape') this.open(false);
-      else if (e.key === 'ArrowUp' && this.hist && this.hist.length) {
-        this.hi = Math.max(0, (this.hi ?? this.hist.length) - 1); inp.value = this.hist[this.hi] || '';
+      else if (e.key === 'Tab') {                    // hoàn thành lệnh đang gõ dở
+        e.preventDefault();
+        const m = this.match(inp.value);
+        if (m) { inp.value = m + ' '; this.hintUpdate(); }
+      } else if (e.key === 'ArrowUp' && this.hist && this.hist.length) {
+        e.preventDefault();
+        this.hi = Math.max(0, (this.hi ?? this.hist.length) - 1); inp.value = this.hist[this.hi] || ''; this.hintUpdate();
       } else if (e.key === 'ArrowDown' && this.hist) {
-        this.hi = Math.min(this.hist.length, (this.hi ?? 0) + 1); inp.value = this.hist[this.hi] || '';
+        e.preventDefault();
+        this.hi = Math.min(this.hist.length, (this.hi ?? 0) + 1); inp.value = this.hist[this.hi] || ''; this.hintUpdate();
       }
     });
     inp.addEventListener('keyup', e => e.stopPropagation());
-    this.say('Sẵn sàng. Gõ  help  để xem danh sách lệnh.', '#8d99ad');
+    this.say('Sẵn sàng. Bấm thẳng vào lệnh bên phải, hoặc gõ rồi Enter.', '#8d99ad');
+    this.statusUpdate();
+  },
+
+  /** tên lệnh đầu tiên khớp tiền tố đang gõ */
+  match(v) {
+    const s = (v || '').trim().toLowerCase();
+    if (!s || s.includes(' ')) return null;
+    return CHEAT_NAMES.find(n => n.startsWith(s) && n !== s) || null;
+  },
+  hintUpdate() {
+    if (!this.ghost) return;
+    const m = this.match(this.input.value);
+    this.ghost.textContent = m ? m + '   ⇥' : '';
+  },
+  /** dải trạng thái: cheat nào đang bật.
+      Hàm này bị gọi mỗi khung hình nên chỉ dựng lại DOM khi nội dung thật sự đổi. */
+  statusUpdate() {
+    if (!this.status) return;
+    const on = [];
+    if (CHEAT.god) on.push('BẤT TỬ');
+    if (CHEAT.noclip) on.push('BAY');
+    if (CHEAT.infMp) on.push('VÔ HẠN MP');
+    if (CHEAT.dmgMul !== 1) on.push('DMG ×' + CHEAT.dmgMul);
+    if (CHEAT.speed !== 1) on.push('TỐC ×' + CHEAT.speed);
+    const key = on.join('|');
+    if (key === this.statusKey) return;
+    this.statusKey = key;
+    this.status.replaceChildren();
+    for (const t of on) this.status.append(el('i', null, t));
+    this.status.classList.toggle('empty', !on.length);
   },
 
   open(on) {
@@ -2725,18 +3194,20 @@ const CheatBox = {
     this.open_ = on === undefined ? !this.open_ : on;
     this.root.classList.toggle('on', this.open_);
     Input.lock = this.open_;
+    this.statusUpdate();
     if (this.open_) { Input.held.clear(); this.input.focus(); } else this.input.blur();
   },
 
-  say(msg, col) {
+  say(msg, col, cls) {
     this.build();
-    const n = document.createElement('div');
-    n.textContent = msg; if (col) n.style.color = col;
+    const n = el('div', cls || null, msg);
+    if (col) n.style.color = col;
     this.log.append(n);
-    while (this.log.children.length > 60) this.log.firstChild.remove();
+    while (this.log.children.length > 80) this.log.firstChild.remove();
     this.log.scrollTop = this.log.scrollHeight;
+    return n;
   },
-  ok(m) { this.say('✔ ' + m, '#67e8f9'); },
+  ok(m) { this.say('✔ ' + m, '#67e8f9'); this.statusUpdate(); },
   no(m) { this.say('✘ ' + m, '#fb7185'); },
 
   run(line) {
@@ -2749,9 +3220,17 @@ const CheatBox = {
 
     switch (cmd) {
       case 'help': case '?':
-        for (const l of CHEAT_HELP) this.say(l, '#9fadc2');
+        for (const g of CHEAT_GROUPS) {
+          this.say('── ' + g.name + ' ──', g.col, 'cbh');
+          for (const it of g.items)
+            this.say('  ' + (it.c + (it.arg ? ' ' + it.arg : '')).padEnd(18) + it.d + (it.k ? '   [' + it.k + ']' : ''), '#9fadc2');
+        }
         break;
-      case 'god': case 'batbai':
+      case 'god': case 'godmode': case 'gm': case 'batbai':
+        toggleGodMode();
+        this.ok('GOD MODE: ' + (CHEAT.godMode ? 'BẬT — bất tử, vô hạn MP, ULT đầy, sát thương ×' + GOD_DMG : 'TẮT'));
+        break;
+      case 'inv': case 'batu':
         CHEAT.god = !CHEAT.god; this.ok('Bất tử: ' + (CHEAT.god ? 'BẬT' : 'TẮT')); GAME.ui.cheatBadge(); break;
       case 'mp': case 'infmp':
         CHEAT.infMp = !CHEAT.infMp; this.ok('Nội lực vô hạn: ' + (CHEAT.infMp ? 'BẬT' : 'TẮT')); GAME.ui.cheatBadge(); break;
@@ -2801,7 +3280,12 @@ const CheatBox = {
         if (!(n >= 1 && n <= DIFFS.length)) return this.no('Dùng: diff 1..4 (1 dễ → 4 ác mộng)');
         G.diffIdx = n - 1; G.diff = DIFFS[n - 1]; NIGHTMARE = !!G.diff.hazard;
         if (h) { h.maxHp = G.diff.heroHp; h.hp = Math.min(h.hp, h.maxHp); }
-        if (playing) { G.plats = (G.diff.hazard && G.level.platN) ? G.level.platN : G.level.plat; G.hz = new Hazards(G); }
+        if (playing) {
+          HAZARD_KIND = G.diff.hazard ? (G.level.hazard || null) : null;
+          G.plats = (HAZARD_KIND === 'lava' && G.level.platN) ? G.level.platN : G.level.plat;
+          G.hz = new Hazards(G);
+        }
+        Music.setTense(!!G.diff.hazard);
         G.ui.setDiff(G.diff); this.ok('Độ khó → ' + G.diff.name); break;
       case 'dmg':
         if (!(n > 0)) return this.no('Dùng: dmg 5   (nhân 5 lần sát thương kiếm)');
@@ -2812,20 +3296,27 @@ const CheatBox = {
       case 'score': case 'diem':
         if (!playing) return this.no('Chỉ dùng khi đang chơi.');
         G.score += Math.round(n || 1000); G.ui.setScore(G.score); this.ok('Điểm hiện tại: ' + G.score); break;
-      case 'lava': case 'nham':
-        if (!G.hz || !G.hz.on) return this.no('Chỉ có ở Ác Mộng (hoặc gõ  hazard  để bật).');
-        G.hz.phase = 'rise'; G.hz.lavaT = 0; this.ok('Nham thạch bắt đầu dâng.'); break;
-      case 'meteor': case 'thienthach':
+      /* ba lệnh dưới đây đổi hẳn loại bẫy đang chạy, để test từng loại ở bất kỳ ải nào */
+      case 'lava': case 'nham': case 'meteor': case 'thienthach': case 'spike': case 'chong': {
+        if (!playing) return this.no('Chỉ dùng khi đang chơi.');
+        const kind = { lava: 'lava', nham: 'lava', meteor: 'meteor', thienthach: 'meteor', spike: 'spike', chong: 'spike' }[cmd];
         if (!G.hz) return this.no('Chưa vào ván.');
-        G.hz.on = true;
-        for (let i = 0; i < 4; i++) G.hz.warns.push({ x: clamp(h.x + rand(-300, 300), 70, G.level.w - 70), t: 1.2 });
-        this.ok('Gọi 4 thiên thạch.'); break;
+        if (G.hz.kind !== kind) { G.hz = G.hz.setKind(kind); HAZARD_KIND = kind; NIGHTMARE = true; }
+        G.hz.grace = 0;
+        if (kind === 'lava') { G.hz.phase = 'rise'; G.hz.lavaT = 0; }
+        if (kind === 'meteor')
+          for (let i = 0; i < 3; i++) G.hz.warns.push({ x: clamp(h.x + rand(-300, 300), 70, G.level.w - 70), t: 1.35 });
+        this.ok(HZ_INFO[kind].ic + ' ' + HZ_INFO[kind].name + ' đang chạy.'); break;
+      }
       case 'hazard': case 'bay_':
         if (!G.hz) return this.no('Chưa vào ván.');
-        G.hz.on = !G.hz.on;
-        if (G.hz.on && !G.hz.bubbles) { G.hz = new Hazards({ ...G, diff: { hazard: true } }); G.hz.G = G; G.hz.on = true; }
-        NIGHTMARE = G.hz.on;
-        this.ok('Hiểm hoạ địa hình: ' + (G.hz.on ? 'BẬT' : 'TẮT')); break;
+        if (G.hz.on) { G.hz.on = false; HAZARD_KIND = null; NIGHTMARE = false; this.ok('Bẫy địa hình: TẮT'); }
+        else {
+          const kind = G.level.hazard || 'spike';
+          G.hz = G.hz.setKind(kind); HAZARD_KIND = kind; NIGHTMARE = true;
+          this.ok('Bẫy địa hình: BẬT · ' + HZ_INFO[kind].name + ' (bẫy mặc định của ải này)');
+        }
+        break;
       case 'gold': case 'vang':
         if (!playing && G.state !== 'shop') return this.no('Chỉ dùng khi đang chơi.');
         G.addGold(Math.round(n || 1000)); this.ok('Vàng hiện có: ' + G.gold); break;
@@ -2838,38 +3329,56 @@ const CheatBox = {
       case 'clear': case 'cls':
         this.log.replaceChildren(); break;
       case 'reset':
-        CHEAT.god = CHEAT.noclip = CHEAT.infMp = false; CHEAT.speed = 1; CHEAT.dmgMul = 1;
-        GAME.ui.cheatBadge(); this.ok('Đã tắt hết cheat.'); break;
+        CHEAT.god = CHEAT.noclip = CHEAT.infMp = CHEAT.godMode = false; CHEAT.speed = 1; CHEAT.dmgMul = 1;
+        GAME.ui.cheatBadge(); GAME.ui.godBadge(); this.ok('Đã tắt hết cheat.'); break;
       default:
         this.no('Không có lệnh "' + cmd + '". Gõ  help.');
     }
   }
 };
 
-const CHEAT_HELP = [
-  'god        — bất tử (F2)',
-  'heal       — hồi đầy HP + MP (F3)',
-  'mp         — nội lực vô hạn',
-  'ult        — nạp đầy tuyệt kỹ (F4)',
-  'kill       — xoá sạch quái trên màn (F5)',
-  'skip       — qua ải hiện tại (F6)',
-  'lv 1..3    — nhảy thẳng tới một ải',
-  'boss       — triệu hồi Hắc Long Vương ngay (F7)',
-  'nuke       — hạ boss tức thì',
-  'win        — phá đảo luôn',
-  'spawn <loại> [số] — slime / wraith / skeleton / mage / golem',
-  'diff 1..4  — đổi độ khó (1 dễ → 4 ác mộng)',
-  'dmg 5      — nhân sát thương kiếm',
-  'speed 0.5  — chỉnh tốc độ game (0.2 – 3)',
-  'score 5000 — cộng điểm',
-  'noclip     — bay xuyên địa hình (F8)',
-  'lava       — kích nham thạch dâng ngay',
-  'meteor     — gọi 4 thiên thạch',
-  'hazard     — bật/tắt bẫy ác mộng ở mọi độ khó',
-  'gold 2000  — cộng vàng · shop — mở bảng nâng cấp',
-  'stun       — tự gây choáng để xem hiệu ứng',
-  'reset      — tắt toàn bộ cheat · clear — xoá log'
+/* Bảng lệnh có nhóm — dùng chung cho cả `help`, danh sách bấm được và gợi ý gõ.
+   `run` = chạy được ngay khi bấm · `fill` = chỉ điền vào ô nhập vì còn thiếu tham số. */
+const CHEAT_GROUPS = [
+  { name: 'NHÂN VẬT', col: '#4ade80', items: [
+    { c: 'god',    k: 'G · F2', d: 'GOD MODE — bất tử + vô hạn MP + ULT đầy + sát thương ×' + GOD_DMG, run: 1 },
+    { c: 'inv',           d: 'chỉ bất tử, không kèm gì khác', run: 1 },
+    { c: 'heal',   k: 'F3', d: 'hồi đầy HP + MP',       run: 1 },
+    { c: 'mp',            d: 'nội lực vô hạn',          run: 1 },
+    { c: 'ult',    k: 'F4', d: 'nạp đầy tuyệt kỹ',      run: 1 },
+    { c: 'noclip', k: 'F8', d: 'bay xuyên địa hình',    run: 1 },
+    { c: 'stun',          d: 'tự gây choáng để xem hiệu ứng', run: 1 }
+  ]},
+  { name: 'MÀN CHƠI', col: '#67e8f9', items: [
+    { c: 'kill',   k: 'F5', d: 'xoá sạch quái trên màn', run: 1 },
+    { c: 'skip',   k: 'F6', d: 'qua ải hiện tại',        run: 1 },
+    { c: 'lv',            d: 'nhảy tới ải 1–3',   arg: '1..3', fill: 'lv ' },
+    { c: 'boss',   k: 'F7', d: 'triệu hồi Hắc Long Vương', run: 1 },
+    { c: 'nuke',          d: 'hạ boss tức thì',          run: 1 },
+    { c: 'win',           d: 'phá đảo luôn',             run: 1 },
+    { c: 'spawn',         d: 'sinh quái',  arg: '<loại> [số]', fill: 'spawn ' }
+  ]},
+  { name: 'BẪY ĐỊA HÌNH', col: '#ff9a4a', items: [
+    { c: 'spike',         d: 'bật bẫy chông (ải I)',      run: 1 },
+    { c: 'meteor',        d: 'gọi 3 thiên thạch (ải II)', run: 1 },
+    { c: 'lava',          d: 'kích nham thạch dâng (ải III)', run: 1 },
+    { c: 'hazard',        d: 'bật/tắt bẫy ở mọi độ khó',  run: 1 }
+  ]},
+  { name: 'CHỈ SỐ', col: '#fbbf24', items: [
+    { c: 'diff',          d: 'đổi độ khó',  arg: '1..4',  fill: 'diff ' },
+    { c: 'dmg',           d: 'nhân sát thương kiếm', arg: '5', fill: 'dmg ' },
+    { c: 'speed',         d: 'tốc độ game', arg: '0.2–3', fill: 'speed ' },
+    { c: 'score',         d: 'cộng điểm',   arg: '5000',  fill: 'score ' },
+    { c: 'gold',          d: 'cộng vàng',   arg: '2000',  fill: 'gold ' },
+    { c: 'shop',          d: 'mở bảng nâng cấp',          run: 1 }
+  ]},
+  { name: 'BẢNG LỆNH', col: '#a78bfa', items: [
+    { c: 'help',          d: 'in lại toàn bộ danh sách',  run: 1 },
+    { c: 'reset',         d: 'tắt toàn bộ cheat',         run: 1 },
+    { c: 'clear',         d: 'xoá nhật ký',               run: 1 }
+  ]}
 ];
+const CHEAT_NAMES = CHEAT_GROUPS.flatMap(g => g.items.map(i => i.c));
 
 /* phím tắt F1–F8 */
 addEventListener('keydown', e => {
@@ -2932,6 +3441,9 @@ class UI {
     this.diffTag = el('div', 'difftag'); this.cheatTag = el('div', 'cheattag');
     $('.hud-top').prepend(this.diffTag);
     $('#hud').append(this.cheatTag);
+    this.godTag = el('div', 'godtag');                       // huy hiệu GOD MODE
+    this.godTag.append(el('b', null, '⛨'), el('span', null, 'GOD MODE'), el('u', null, 'G để tắt'));
+    $('#hud').append(this.godTag);
     const shBar = el('div', 'bar sh');                       // thanh khí thuẫn
     shBar.append(el('i', 'fill'), el('b', null, 'KHIÊN'), el('span', null, '60/60'));
     $('.bars').insertBefore(shBar, $('.bar.en'));
@@ -2952,15 +3464,18 @@ class UI {
     this.diffTag.textContent = d.name;
     this.diffTag.style.setProperty('--dc', d.col);
   }
+  godBadge() { this.godTag.classList.toggle('on', CHEAT.godMode); }
   cheatBadge() {
     const on = [];
-    if (CHEAT.god) on.push('BẤT TỬ');
+    // khi GOD MODE bật thì đã có huy hiệu riêng — chỉ liệt kê cheat bật thêm bằng tay
+    if (CHEAT.god && !CHEAT.godMode) on.push('BẤT TỬ');
     if (CHEAT.noclip) on.push('BAY');
-    if (CHEAT.infMp) on.push('VÔ HẠN MP');
-    if (CHEAT.dmgMul !== 1) on.push('DMG ×' + CHEAT.dmgMul);
+    if (CHEAT.infMp && !CHEAT.godMode) on.push('VÔ HẠN MP');
+    if (CHEAT.dmgMul !== 1 && !(CHEAT.godMode && CHEAT.dmgMul === GOD_DMG)) on.push('DMG ×' + CHEAT.dmgMul);
     if (CHEAT.speed !== 1) on.push('TỐC ×' + CHEAT.speed);
     this.cheatTag.textContent = on.length ? 'CHEAT · ' + on.join(' · ') : '';
     this.cheatTag.classList.toggle('on', on.length > 0);
+    CheatBox.statusUpdate();          // đồng bộ dải trạng thái trong bảng lệnh
   }
   bars(h) {
     const hp = h.hp / h.maxHp * 100;
@@ -3038,22 +3553,52 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
     this.hero = new Hero(160, this.diff);
     this.ui.setGold(0);
     this.ui.setDiff(this.diff);
+    this.ui.godBadge();               // GOD MODE giữ nguyên qua mỗi lần chơi lại
     this.loadLevel(0);
   }
   diffCard() {
     this.state = 'menu';
+    /* Bốn chỉ số quan trọng nhất, quy về thang 5 vạch để so sánh bằng mắt */
+    const METERS = [
+      { k: 'MÁU QUÁI', v: d => d.hpMul / 2.2 },
+      { k: 'SÁT THƯƠNG', v: d => d.dmgMul / 2 },
+      { k: 'SỐ LƯỢNG', v: d => d.cntMul / 2 },
+      { k: 'VẬT PHẨM', v: d => d.drop / .45 }
+    ];
+    const pips = f => { const n = Math.round(clamp(f, 0, 1) * 5); let s = ''; for (let i = 0; i < 5; i++) s += '<i' + (i < n ? ' class="on"' : '') + '></i>'; return s; };
+    const list = DIFFS.map((d, i) => {
+      const meters = METERS.map(m =>
+        '<span class="dm"><small>' + m.k + '</small><span class="pips">' + pips(m.v(d)) + '</span></span>').join('');
+      const hazards = d.hazard
+        ? '<span class="dhz">' + LEVELS.map((L, k) => {
+            const hz = HZ_INFO[L.hazard]; if (!hz) return '';
+            return '<i style="--hc:' + hz.col + '">' + hz.ic + ' ẢI ' + (k + 1) + ' · ' + hz.name + '</i>';
+          }).join('') + '</span>'
+        : '';
+      return '<button class="diffbtn" data-act="diff" data-i="' + i + '" style="--dc:' + d.col + '">' +
+        '<span class="dnum">' + (i + 1) + '</span>' +
+        '<span class="dn">' + d.name + '</span><span class="ds">' + d.sub + '</span>' +
+        '<span class="dhp">MÁU KHỞI ĐẦU ' + d.heroHp + ' · ĐIỂM ×' + d.scoreMul + '</span>' +
+        '<span class="dmeters">' + meters + '</span>' +
+        '<span class="dd">' + d.desc + '</span>' + hazards + '</button>';
+    }).join('');
     this.ui.show(
       '<div class="eyebrow">CHỌN ĐƯỜNG TU LUYỆN</div><h2>ĐỘ KHÓ</h2>' +
-      '<div class="difflist">' + DIFFS.map((d, i) =>
-        '<button class="diffbtn" data-act="diff" data-i="' + i + '" style="--dc:' + d.col + '">' +
-        '<span class="dn">' + d.name + '</span><span class="ds">' + d.sub + '</span>' +
-        '<span class="dd">' + d.desc + '</span></button>').join('') + '</div>' +
+      '<p class="hint">Bấm số <kbd>1</kbd>–<kbd>4</kbd> để chọn nhanh. Vạch càng đầy thì quái càng mạnh — riêng VẬT PHẨM càng đầy càng có lợi cho bạn.</p>' +
+      '<div class="difflist">' + list + '</div>' +
+      '<div class="optrow">' +
+      '<button class="opt god' + (CHEAT.godMode ? ' on' : '') + '" data-act="god">⛨ GOD MODE · ' +
+      (CHEAT.godMode ? 'BẬT' : 'TẮT') + '</button>' +
+      '<span class="opt flat">bật trước khi vào để test thẳng</span>' +
+      '</div>' +
       '<div class="row"><button class="btn ghost" data-act="menu">QUAY LẠI</button></div>');
   }
   loadLevel(i) {
     this.levelIdx = i;
     this.level = LEVELS[i];
-    this.plats = (this.diff.hazard && this.level.platN) ? this.level.platN : this.level.plat;
+    HAZARD_KIND = this.diff.hazard ? (this.level.hazard || null) : null;
+    // chỉ ải nham thạch mới cần bộ bệ đá cao — hai ải kia giữ địa hình gốc
+    this.plats = (HAZARD_KIND === 'lava' && this.level.platN) ? this.level.platN : this.level.plat;
     this.enemies = []; this.shots = []; this.drops = []; this.spawns = [];
     this.boss = null; this.waveIdx = 0; this.waveT = 1.2; this.bossPending = !!this.level.boss;
     this.hero.x = 160; this.hero.y = GROUND; this.hero.vx = this.hero.vy = 0;
@@ -3069,16 +3614,27 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
   storyCard() {
     this.state = 'story';
     const L = this.level;
+    const hz = this.diff.hazard ? HZ_INFO[L.hazard] : null;
     this.ui.show(
       '<div class="eyebrow">CHƯƠNG ' + (this.levelIdx + 1) + ' / ' + LEVELS.length + '</div>' +
       '<h2>' + L.name + '</h2>' +
       '<p class="lore">' + L.lore + '</p>' +
-      '<div class="row"><button class="btn" data-act="go">VÀO ẢI</button></div>');
+      (hz ? '<div class="hzcall" style="--hc:' + hz.col + '">' +
+        '<b>' + hz.ic + '</b><span class="hzn">BẪY CỦA ẢI NÀY · ' + hz.name + '</span>' +
+        '<span class="hzt">' + hz.tip + '</span>' +
+        '<span class="hzg">Bẫy nghỉ ' + HZ_GRACE.toFixed(1).replace('.', ',') + ' giây đầu ải để bạn kịp định vị.</span></div>' : '') +
+      '<div class="row"><button class="btn" data-act="go">VÀO ẢI</button></div>' +
+      '<p class="hint">Nhấn <kbd>Enter</kbd> để vào ngay.</p>');
   }
   begin() {
     this.ui.hide(); this.state = 'play';
+    Music.play(this.level.theme);              // mỗi ải một chủ đề nhạc riêng
+    Music.setTense(!!this.diff.hazard);
     this.ui.flashBanner(this.level.name.split('—')[1].trim(), 'ĐỢT 1');
     this.spawnWave();
+    // nhắc loại bẫy của ải này ngay sau banner mở màn
+    const hz = this.hz && this.hz.info;
+    if (hz) setTimeout(() => { if (this.state === 'play') this.ui.flashBanner(hz.ic + ' ' + hz.name, hz.sub); }, 2400);
   }
   spawnWave() {
     const w = this.level.waves[this.waveIdx];
@@ -3125,12 +3681,14 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
     if (this.state === 'win' || this.state === 'dead') return;
     this.state = win ? 'win' : 'dead';
     this.endT = win ? 1.9 : 1.1;      // đếm bằng vòng lặp game, không dùng setTimeout
+    Music.setTense(false);
     if (win) {
+      Music.play('victory');
       Sfx.win(); cam.bang('rgba(255,255,255,.9)', 1.4); cam.kick(26);
       const bx = this.boss ? this.boss.x : this.hero.x;
       for (let i = 0; i < 26; i++) ring(bx + rand(-140, 140), rand(180, GROUND), pick(['#fde68a', '#f0abfc', '#a5f3fc']), 4, rand(60, 200), .8, 5);
       this.score += 3000;
-    } else Sfx.lose();
+    } else { Sfx.lose(); Music.stop(); }
     this.best = Math.max(this.best, this.score);
   }
 
@@ -3185,32 +3743,108 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
   menuCard() {
     this.state = 'menu';
     this.ui.boss(false);
+    Music.play('menu'); Music.setTense(false);
+    HAZARD_KIND = null; NIGHTMARE = false;
+    const route = LEVELS.map((L, i) => {
+      const hz = HZ_INFO[L.hazard];
+      return '<div class="rt" style="--tc:' + THEMES[L.theme].accent + '">' +
+        '<b>ẢI ' + ['I', 'II', 'III'][i] + '</b>' +
+        '<span>' + L.name.split('—')[1].trim() + '</span>' +
+        (hz ? '<i style="--hc:' + hz.col + '">' + hz.ic + ' ' + hz.name + '</i>' : '') +
+        '</div>';
+    }).join('');
     this.ui.show(
       '<div class="eyebrow">VƯỢT ẢI · DIỆT QUÁI · PHÁ ĐẢO</div>' +
       '<h1>HẮC VÂN KIẾM</h1>' +
       '<p>Ba ải. Năm loài quái. Một Hắc Long Vương. Kiếm sĩ cuối cùng của Vọng Lâm bước vào bóng tối với một thanh kiếm và không có đường lui.</p>' +
-      '<div class="keys">' +
-      '<div><kbd>A</kbd> <kbd>D</kbd> di chuyển</div>' +
-      '<div><kbd>W</kbd>/<kbd>Space</kbd> nhảy đôi</div>' +
-      '<div><kbd>J</kbd>/<kbd>Chuột</kbd> chém liên hoàn</div>' +
-      '<div><kbd>Shift</kbd> lướt né</div>' +
-      '<div><kbd>K</kbd>/<kbd>Chuột phải</kbd> đỡ &amp; phản đòn</div>' +
-      '<div><kbd>L</kbd> kiếm khí</div>' +
-      '<div><kbd>E</kbd> tuyệt kỹ</div>' +
-      '<div><kbd>Esc</kbd> tạm dừng</div>' +
-      '</div>' +
+      '<div class="route">' + route + '</div>' +
+      '<p class="hint">Bẫy trong ngoặc chỉ xuất hiện ở độ khó <b style="color:#f43f5e">ÁC MỘNG</b> — mỗi ải một loại.</p>' +
       '<div class="row"><button class="btn" data-act="pickdiff">BẮT ĐẦU HÀNH TRÌNH</button>' +
-      '<button class="btn ghost" data-act="cheats">CHEAT / TEST</button></div>');
+      '<button class="btn ghost" data-act="help">HƯỚNG DẪN</button>' +
+      '<button class="btn god' + (CHEAT.godMode ? ' on' : '') + '" data-act="god">' +
+      '⛨ GOD MODE · ' + (CHEAT.godMode ? 'BẬT' : 'TẮT') + '</button></div>' +
+      '<p class="hint">GOD MODE: bất tử · nội lực vô hạn · ULT luôn đầy · sát thương ×' + GOD_DMG +
+      '. Bật/tắt bất cứ lúc nào bằng phím <kbd>G</kbd>, kể cả giữa trận.</p>' +
+      '<div class="optrow">' +
+      '<button class="opt" data-act="music">NHẠC NỀN · ' + (Music.enabled ? 'BẬT' : 'TẮT') + '</button>' +
+      '<button class="opt" data-act="mute">' + (Sfx.muted ? 'BẬT ÂM' : 'TẮT ÂM') + '</button>' +
+      '<button class="opt" data-act="cheats">BẢNG LỆNH ĐẦY ĐỦ</button>' +
+      '<span class="opt flat">G god · N nhạc · M âm · F1 lệnh</span>' +
+      '</div>');
+  }
+
+  /** Bảng hướng dẫn tách riêng để màn hình chính không bị chữ lấn.
+      `back` nhớ nơi vừa mở nó, để bấm QUAY LẠI khi đang tạm dừng không làm mất ván. */
+  helpCard(back = 'menu') {
+    this.helpBack = back;
+    if (back === 'menu') this.state = 'menu';
+    const keyRow = (label, keys, desc) =>
+      '<div class="kr"><span class="kk">' + keys.map(k => '<kbd>' + k + '</kbd>').join('') + '</span>' +
+      '<span class="kn">' + label + '</span><span class="kd">' + desc + '</span></div>';
+    const hzRow = LEVELS.map((L, i) => {
+      const hz = HZ_INFO[L.hazard]; if (!hz) return '';
+      return '<div class="hzr" style="--hc:' + hz.col + '"><b>' + hz.ic + '</b>' +
+        '<span class="hzn">ẢI ' + (i + 1) + ' · ' + hz.name + '</span>' +
+        '<span class="hzt">' + hz.tip + '</span></div>';
+    }).join('');
+    this.ui.show(
+      '<div class="eyebrow">SỔ TAY KIẾM SĨ</div><h2>HƯỚNG DẪN</h2>' +
+      '<div class="helpgrid">' +
+      '<section><h3>DI CHUYỂN</h3>' +
+      keyRow('Chạy', ['A', 'D'], 'hoặc ← →') +
+      keyRow('Nhảy đôi', ['W', 'Space'], 'nhấn hai lần để nhảy tiếp') +
+      keyRow('Rơi xuyên bệ', ['S', 'Space'], 'giữ S rồi nhảy') +
+      '</section>' +
+      '<section><h3>CHIẾN ĐẤU</h3>' +
+      keyRow('Liên trảm', ['J', 'Chuột'], '3 nhát, nhát cuối hất tung') +
+      keyRow('Ảnh bộ', ['Shift'], 'lướt né, miễn thương khi lướt') +
+      keyRow('Khí thuẫn', ['K', 'Chuột phải'], 'giữ để đỡ đòn phía trước') +
+      keyRow('Băng phù', ['L'], 'bắn kiếm khí · 24 MP') +
+      keyRow('Thiên Kiếm Trảm', ['E'], 'toàn màn hình khi ULT đầy') +
+      '</section>' +
+      '<section><h3>HỆ THỐNG</h3>' +
+      keyRow('Tạm dừng', ['Esc'], 'mở lại bảng nghỉ tay') +
+      keyRow('Tắt / bật âm', ['M'], 'toàn bộ âm thanh') +
+      keyRow('Nhạc nền', ['N'], 'chỉ tắt nhạc, giữ tiếng đánh') +
+      keyRow('GOD MODE', ['G', 'F2'], 'bất tử + vô hạn MP + ULT đầy + sát thương ×' + GOD_DMG) +
+      keyRow('Bảng lệnh', ['`', 'F1'], 'danh sách cheat đầy đủ') +
+      '</section>' +
+      '<section><h3>ĐỠ ĐÒN</h3>' +
+      '<p class="mini"><b>Đỡ thường</b> — chặn 100% sát thương từ phía trước, trừ vào thanh KHIÊN. Đánh sau lưng thì không đỡ được.</p>' +
+      '<p class="mini"><b>Đỡ hoàn mỹ</b> — bấm đỡ trong 0,22 giây trước khi trúng đòn: không mất khiên, cộng ULT, bắn ngược đạn với 190% sát thương.</p>' +
+      '<p class="mini"><b>Vỡ khiên</b> — hết khiên thì choáng 0,55 giây và cấm đỡ 1,4 giây.</p>' +
+      '</section>' +
+      '</div>' +
+      '<div class="hzbox"><div class="hzhead">BẪY ĐỊA HÌNH · CHỈ Ở ÁC MỘNG</div>' + hzRow + '</div>' +
+      '<div class="row">' +
+      (back === 'pause'
+        ? '<button class="btn" data-act="helpback">TRỞ LẠI VÁN</button>'
+        : '<button class="btn" data-act="pickdiff">CHỌN ĐỘ KHÓ</button>' +
+          '<button class="btn ghost" data-act="menu">QUAY LẠI</button>') +
+      '</div>');
   }
   pause(on) {
     if (on && this.state === 'play') {
       this.state = 'pause';
+      const hz = this.hz && this.hz.info;
       this.ui.show('<div class="eyebrow">TẠM DỪNG</div><h2>NGHỈ TAY</h2>' +
-        '<p>' + this.level.name + ' · Đợt ' + (this.waveIdx + 1) + '</p>' +
+        '<p>' + this.level.name + ' · Đợt ' + (this.waveIdx + 1) + ' / ' + this.level.waves.length + '</p>' +
+        (hz ? '<div class="hzcall" style="--hc:' + hz.col + '"><b>' + hz.ic + '</b>' +
+          '<span class="hzn">' + hz.name + '</span><span class="hzt">' + hz.tip + '</span></div>' : '') +
         '<div class="row"><button class="btn" data-act="resume">TIẾP TỤC</button>' +
-        '<button class="btn ghost" data-act="mute">' + (Sfx.muted ? 'BẬT ÂM' : 'TẮT ÂM') + '</button>' +
-        '<button class="btn danger" data-act="menu">BỎ CUỘC</button></div>');
-    } else if (!on && this.state === 'pause') { this.ui.hide(); this.state = 'play'; }
+        '<button class="btn ghost" data-act="help">HƯỚNG DẪN</button>' +
+        '<button class="btn danger" data-act="menu">BỎ CUỘC</button></div>' +
+        '<div class="optrow">' +
+        '<button class="opt god' + (CHEAT.godMode ? ' on' : '') + '" data-act="god">⛨ GOD MODE · ' +
+        (CHEAT.godMode ? 'BẬT' : 'TẮT') + '</button>' +
+        '<button class="opt" data-act="music">NHẠC NỀN · ' + (Music.enabled ? 'BẬT' : 'TẮT') + '</button>' +
+        '<button class="opt" data-act="mute">' + (Sfx.muted ? 'BẬT ÂM' : 'TẮT ÂM') + '</button>' +
+        '</div>');
+      Music.fade(Music.enabled && !Sfx.muted ? .45 : 0, .3);
+    } else if (!on && this.state === 'pause') {
+      this.ui.hide(); this.state = 'play';
+      Music.fade(Music.enabled && !Sfx.muted ? 1 : 0, .3);
+    }
   }
 
   /* ---------- gắn sự kiện — Ch.15 ---------- */
@@ -3219,6 +3853,8 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
     this.ui.overlay.addEventListener('click', e => {
       const b = e.target.closest('[data-act]'); if (!b) return;
       Sfx.init();
+      // trình duyệt chỉ cho phát âm sau thao tác đầu tiên — bật nhạc menu ngay tại đây
+      if (!Music.name && this.state === 'menu') Music.play('menu');
       switch (b.dataset.act) {
         case 'pickdiff': this.diffCard(); break;
         case 'diff': this.newGame(+b.dataset.i); break;
@@ -3230,7 +3866,15 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
         case 'again': this.diffCard(); break;
         case 'menu': this.crashed = false; this.menuCard(); break;
         case 'resumeErr': this.crashed = false; this.ui.hide(); this.state = this.hero ? 'play' : 'menu'; if (!this.hero) this.menuCard(); break;
-        case 'mute': Sfx.muted = !Sfx.muted; b.textContent = Sfx.muted ? 'BẬT ÂM' : 'TẮT ÂM'; break;
+        case 'mute': toggleMute(); b.textContent = Sfx.muted ? 'BẬT ÂM' : 'TẮT ÂM'; break;
+        case 'music': Music.setEnabled(!Music.enabled); b.textContent = 'NHẠC NỀN · ' + (Music.enabled ? 'BẬT' : 'TẮT'); break;
+        case 'god':
+          toggleGodMode();
+          b.textContent = '⛨ GOD MODE · ' + (CHEAT.godMode ? 'BẬT' : 'TẮT');
+          b.classList.toggle('on', CHEAT.godMode);
+          break;
+        case 'help': this.helpCard(this.state === 'pause' ? 'pause' : 'menu'); break;
+        case 'helpback': this.state = 'play'; this.pause(true); break;
         case 'next': this.loadLevel(this.levelIdx + 1); break;
         case 'shop': this.shopCard(); break;
         case 'buy': {
@@ -3250,8 +3894,15 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
         if (this.state === 'dead' || this.state === 'win') { this.endT = null; this.endCard(this.state === 'win'); }
         else this.pause(this.state === 'play');
       }
-      if (e.code === 'KeyM') Sfx.muted = !Sfx.muted;
+      if (e.code === 'KeyM') toggleMute();
+      if (e.code === 'KeyN') Music.setEnabled(!Music.enabled);
+      if (e.code === 'KeyG') toggleGodMode();            // bật/tắt GOD MODE mọi lúc
       if (e.code === 'Enter' && (this.state === 'story')) this.begin();
+      // chọn nhanh độ khó bằng phím số khi bảng độ khó đang mở
+      if (/^Digit[1-4]$/.test(e.code) && this.ui.overlay.querySelector('.difflist')) {
+        const i = +e.code.slice(5) - 1;
+        if (i < DIFFS.length) { Sfx.init(); this.newGame(i); }
+      }
     });
     document.addEventListener('visibilitychange', () => { if (document.hidden) this.pause(true); });
 
@@ -3340,6 +3991,7 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
   }
   summonBoss() {
     this.bossPending = false;
+    Music.play('boss');
     this.boss = new Boss(clamp(this.hero.x + 520, 300, this.level.w - 200), this.diff.bossMul, this.diff);
     this.boss.face = this.boss.x > this.hero.x ? -1 : 1;
     Sfx.roar(); cam.kick(22); cam.bang('rgba(225,29,72,.4)', 1);
@@ -3483,7 +4135,8 @@ class Game extends EventTarget {                 // dùng CustomEvent — Ch.15
 
     // lớp phủ: sương, vignette, chớp sáng
     ctx.fillStyle = THEMES[th].fog; ctx.fillRect(0, 0, VW, VH);
-    if (NIGHTMARE) { ctx.fillStyle = 'rgba(255,60,20,.055)'; ctx.fillRect(0, 0, VW, VH); if (this.hz) this.hz.drawEmbers(ctx, performance.now() / 1000); }
+    const tint = hzTint();
+    if (tint) { ctx.fillStyle = tint.veil; ctx.fillRect(0, 0, VW, VH); if (this.hz) this.hz.drawEmbers(ctx, performance.now() / 1000); }
     const vg = ctx.createRadialGradient(VW / 2, VH / 2, VH * .42, VW / 2, VH / 2, VH * 1.05);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.72)');
     ctx.fillStyle = vg; ctx.fillRect(0, 0, VW, VH);
@@ -3555,7 +4208,7 @@ GAME.score = 0; GAME.combo = 0; GAME.comboT = 0; GAME.kills = 0; GAME.time = 0; 
 GAME.diffIdx = 1; GAME.diff = DIFFS[1];
 GAME.gold = 0; GAME.quakeT = 0; GAME.endT = null; GAME.crashed = false;
 GAME.ui.setGold(0);
-GAME.ui.setDiff(GAME.diff); GAME.ui.cheatBadge();
+GAME.ui.setDiff(GAME.diff); GAME.ui.cheatBadge(); GAME.ui.godBadge();
 GAME.menuCard();
 
 let last = performance.now(), acc = 0;

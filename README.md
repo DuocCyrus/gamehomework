@@ -16,6 +16,10 @@ Toàn bộ nhân vật, quái, boss và bối cảnh được vẽ bằng `path`
 | `L` | Băng Phù — bắn kiếm khí theo hướng chuột (24 MP) |
 | `E` | Thiên Kiếm Trảm — tuyệt kỹ toàn màn hình khi ULT đầy |
 | `Esc` | Tạm dừng |
+| `G` hoặc `F2` | **GOD MODE** — bật/tắt chế độ test nhanh |
+| `M` | Tắt / bật toàn bộ âm thanh |
+| `N` | Tắt / bật riêng nhạc nền (vẫn giữ tiếng đánh) |
+| `1` – `4` | Chọn nhanh độ khó khi đang ở bảng chọn |
 | `` ` `` hoặc `F1` | Mở bảng lệnh cheat |
 
 Trên điện thoại sẽ tự hiện cụm nút cảm ứng.
@@ -25,6 +29,25 @@ Trên điện thoại sẽ tự hiện cụm nút cảm ứng.
 * **Đỡ thường** — chặn 100% sát thương từ *phía trước*, trừ vào thanh KHIÊN thay vì máu. Bị đánh sau lưng thì không đỡ được.
 * **Đỡ hoàn mỹ** — bấm đỡ trong vòng **0,22 giây** trước khi trúng đòn: không mất khiên, cộng ULT, và **bắn ngược viên đạn về phía địch với 190% sát thương**.
 * **Vỡ khiên** — hết thanh khiên thì choáng 0,55 giây và cấm đỡ 1,4 giây. Khiên tự hồi 26/giây khi không đỡ.
+
+### Nhạc nền
+
+Sáu bản nhạc, **mỗi ải một chủ đề riêng khớp với bối cảnh** — không nạp file nhạc nào, toàn bộ
+nốt do WebAudio dựng tại chỗ, đúng tinh thần "không thư viện, không file" của cả dự án:
+
+| Bản | Dùng ở | Tính chất |
+|---|---|---|
+| `menu` | Màn hình chính | 62 BPM, thưa và huyền bí |
+| `forest` | Ải I · Rừng Tử Khí | 76 BPM, ngũ cung, sáo gỗ, rất thoáng |
+| `cave` | Ải II · Hang Nham Thạch | 98 BPM, trống nặng, bè trầm dồn dập |
+| `palace` | Ải III · Điện Hắc Ám | 104 BPM, hành khúc thứ hoà thanh, uy nghi |
+| `boss` | Khi Hắc Long Vương xuất hiện | 138 BPM, nhanh và dày |
+| `victory` | Khi phá đảo | 84 BPM, vang và mở |
+
+Mỗi bản là một mảng 16 bước (bè trầm · giai điệu · trống) cộng một nền hợp âm giữ liên tục.
+Bộ lập lịch nhìn trước 120 ms bằng `setInterval`, **không phụ thuộc `requestAnimationFrame`**
+nên nhạc không lệch nhịp khi khung hình tụt. Riêng Ác Mộng chèn thêm một tầng trầm rền (E1)
+phía dưới cho nặng không khí.
 
 ---
 
@@ -60,13 +83,22 @@ Trên điện thoại sẽ tự hiện cụm nút cảm ứng.
 | **Dễ** · Nhàn Du | ×0,72 | ×0,65 | ×0,70 | 150 | 42% | ×0,7 |
 | **Bình thường** · Chính Đạo | ×1 | ×1 | ×1 | 120 | 26% | ×1 |
 | **Khó** · Huyết Chiến | ×1,50 | ×1,45 | ×1,45 | 100 | 17% | ×1,7 |
-| **Ác mộng** · Cửu U Ngục | ×2,05 | ×1,90 | ×1,85 | 85 | 11% | ×2,6 |
+| **Ác mộng** · Cửu U Ngục | ×1,80 | ×1,62 | ×1,55 | 100 | 17% | ×2,6 |
 
-**Riêng Ác Mộng đổi hẳn địa hình** — mỗi ải dùng bộ bệ đá riêng (`platN`): 6–8 bệ hẹp treo cao thay cho nền đất rộng, mặt đất nứt nham thạch, tàn lửa bay khắp màn. Kèm ba hiểm hoạ:
+### Bẫy địa hình — mỗi ải một loại
 
-* **Nham thạch dâng** theo chu kỳ 22,7 giây (thấp 11s → dâng 2,6s → ngập 6,5s → rút 2,6s). Khi ngập, mặt đất là tử địa, phải leo lên bệ. Có banner báo trước.
-* **Thiên thạch** mỗi 3,6–6,4 giây, 2–4 quả: vòng đỏ cảnh báo 1,2 giây → rơi → nổ 30 sát thương bán kính 86 → để lại vũng lửa 2,8 giây.
-* **Bẫy chông** rải dọc màn, chu kỳ 3,6 giây: ẩn → nứt sáng cảnh báo 0,5 giây → trồi lên 20 sát thương.
+Ác Mộng **không dồn cả ba bẫy vào cùng một ải**. Mỗi ải chỉ có đúng một loại, độ phức tạp
+tăng dần để người chơi học xong bẫy này mới phải học bẫy sau. Vào ải luôn có **3,2 giây yên
+thân** trước khi bẫy bắt đầu chạy, và mỗi ải nhuộm một tông màu địa hình riêng.
+
+| Ải | Bẫy | Cách hoạt động |
+|---|---|---|
+| **I · Rừng Tử Khí** | ⩗ Bẫy chông | Rải dọc màn, chu kỳ 3,6 giây: ẩn → **nứt sáng cảnh báo 0,55 giây** → trồi lên, 16 sát thương. Bẫy tĩnh, chỉ cần đọc vết nứt rồi nhảy hoặc lướt qua. |
+| **II · Hang Nham Thạch** | ☄ Thiên thạch | Mỗi 4,2–7,2 giây, 2–3 quả: vòng đỏ cảnh báo **1,35 giây** → rơi → nổ 22 sát thương bán kính 82 → để lại vũng lửa 2,8 giây (8 sát thương mỗi 0,6 giây). Bẫy động, buộc di chuyển liên tục. |
+| **III · Điện Hắc Ám** | ≈ Nham thạch | Chu kỳ 23,3 giây (thấp 12s → dâng 3s → ngập 5,5s → rút 2,8s). Khi ngập, mặt đất là tử địa (12 sát thương mỗi 0,55 giây) — phải leo lên bệ. Có banner và tiếng gầm báo trước. |
+
+Riêng **ải nham thạch** đổi sang bộ bệ đá cao `platN` (bệ hẹp treo cao thay nền đất rộng) vì
+đó là ải duy nhất cần chỗ trú. Hai ải kia giữ nguyên địa hình gốc.
 
 ---
 
@@ -88,12 +120,36 @@ Nhặt đồng tiền rơi từ quái, cộng tiền thưởng khi vượt ải
 
 ## Cheat để test
 
-Nhấn `` ` `` hoặc `F1` để mở bảng lệnh. Phím tắt nhanh: `F2` bất tử · `F3` hồi máu · `F4` đầy ULT ·
+### GOD MODE — cách nhanh nhất
+
+Bấm **`G`** (hoặc `F2`) là xong, không cần mở bảng lệnh, không cần gõ gì. Bật/tắt được **mọi lúc**,
+kể cả giữa trận. Một công tắc gộp bốn thứ:
+
+* **Bất tử** — quái, boss và cả ba loại bẫy địa hình đều không trừ máu
+* **Nội lực vô hạn** — bắn Băng Phù thoải mái
+* **Máu · khiên · ULT luôn đầy** — không phải dừng lại hồi phục, tuyệt kỹ lúc nào cũng dùng được
+* **Sát thương ×5** — lướt nhanh qua nội dung để tới chỗ cần xem
+
+Khi bật sẽ có huy hiệu ⛨ vàng nhấp nháy ở góc phải màn hình. Trạng thái **giữ nguyên qua mỗi lần
+chơi lại**, nên bật một lần rồi test bao nhiêu ván cũng được. Nút bấm có sẵn ở màn hình chính,
+bảng chọn độ khó và bảng tạm dừng.
+
+Cần bất tử *không kèm* mấy thứ kia thì dùng lệnh `inv`.
+
+### Bảng lệnh đầy đủ
+
+Nhấn `` ` `` hoặc `F1` để mở. Phím tắt nhanh: `F3` hồi máu · `F4` đầy ULT ·
 `F5` diệt sạch quái · `F6` qua ải · `F7` gọi boss · `F8` bay xuyên địa hình.
 
+Bảng lệnh chia hai cột: **nhật ký** bên trái, **danh sách lệnh bấm được** bên phải (nhóm theo
+màu — nhân vật, màn chơi, bẫy địa hình, chỉ số). Bấm thẳng vào lệnh để chạy, lệnh cần tham số
+thì tự điền sẵn vào ô nhập. Trong ô nhập: `Enter` chạy · `Tab` hoàn thành lệnh đang gõ dở ·
+`↑` `↓` lịch sử · `Esc` đóng. Dải trạng thái trên đầu luôn hiện cheat nào đang bật.
+
 ```
-god                 bất tử                    heal        hồi đầy HP + MP
-mp                  nội lực vô hạn            ult         nạp đầy tuyệt kỹ
+god / gm            GOD MODE (gộp cả 4)       inv         chỉ bất tử, không kèm gì
+heal                hồi đầy HP + MP           ult         nạp đầy tuyệt kỹ
+mp                  nội lực vô hạn
 kill                xoá sạch quái             skip        qua ải hiện tại
 lv 1..3             nhảy thẳng tới một ải     boss        triệu hồi boss ngay
 nuke                hạ boss tức thì           win         phá đảo luôn
@@ -102,9 +158,13 @@ diff 1..4           đổi độ khó giữa ván       dmg 5       nhân sát t
 speed 0.3           chỉnh tốc độ game         score 5000  cộng điểm
 gold 2000           cộng vàng                 shop        mở bảng nâng cấp
 noclip              bay xuyên địa hình        stun        tự gây choáng để xem hiệu ứng
-lava                kích nham thạch dâng      meteor      gọi 4 thiên thạch
-hazard              bật/tắt bẫy Ác Mộng ở mọi độ khó
+spike               bật bẫy chông (ải I)      meteor      gọi 3 thiên thạch (ải II)
+lava                kích nham thạch dâng (ải III)
+hazard              bật/tắt bẫy ở mọi độ khó — bật lại theo đúng bẫy của ải hiện tại
 reset               tắt toàn bộ cheat         clear       xoá log       help  danh sách đầy đủ
 ```
 
-Combo hay dùng khi test boss: `diff 4` → `lv 3` → `god` → `boss` → `dmg 20`, rồi `speed 0.3` để xem chậm từng chiêu.
+Ba lệnh `spike` / `meteor` / `lava` **đổi hẳn loại bẫy đang chạy**, nên có thể thử bất kỳ bẫy
+nào ở bất kỳ ải nào mà không cần chơi lại.
+
+Combo hay dùng khi test boss: bấm `G` rồi gõ `lv 3` → `boss`, thêm `speed 0.3` để xem chậm từng chiêu.
